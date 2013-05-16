@@ -7,15 +7,15 @@ enum VarType{
 	UnknownType
 };
 
-class VarValue{
+class Value{
 public:
-	VarValue() {}
-	VarValue(VarType _type, string _value)
+	Value() {}
+	Value(VarType _type, string _value)
 	{
 		type = _type;
 		value = _value;
 	}
-	~VarValue(){}
+	~Value(){}
 
 	bool isFraction() { return type == FractType; }
 	bool isBool() { return type == BoolType; }
@@ -43,17 +43,17 @@ private:
 class Variable
 {
 public:
-	Variable(void);
-	Variable(string _name){ name = _name; value = VarValue(UnknownType, ""); }
-	~Variable(void);
+	Variable(void) {}
+	Variable(string _name){ name = _name; value = Value(UnknownType, ""); }
+	~Variable(void) {}
 
-	VarValue getValue() { return value; }
+	Value getValue() { return value; }
 	string getName() { return name; }
-	void setValue(VarValue _value) { value = _value; }
+	void setValue(Value _value) { value = _value; }
 	void setName(string _name) { name = _name; }
 
 private:
 	string name;
-	VarValue value;
+	Value value;
 };
 

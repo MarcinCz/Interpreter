@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Instructions">
+      <UniqueIdentifier>{75218855-6109-4cad-8606-c1bb84ea34f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Instructions">
+      <UniqueIdentifier>{731b8c1e-7f97-4436-80e5-1047c6e29252}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,9 +33,6 @@
     <ClCompile Include="SyntaxAnalyzer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DeclarationInstruction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Variable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,9 +43,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AssigmentInstruction.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Instructions</Filter>
+    </ClCompile>
+    <ClCompile Include="DeclarationInstruction.cpp">
+      <Filter>Source Files\Instructions</Filter>
     </ClCompile>
     <ClCompile Include="ExpressionInstruction.cpp">
+      <Filter>Source Files\Instructions</Filter>
+    </ClCompile>
+    <ClCompile Include="FunDeclarationInstruction.cpp">
+      <Filter>Source Files\Instructions</Filter>
+    </ClCompile>
+    <ClCompile Include="WhileInstruction.cpp">
+      <Filter>Source Files\Instructions</Filter>
+    </ClCompile>
+    <ClCompile Include="IfInstruction.cpp">
+      <Filter>Source Files\Instructions</Filter>
+    </ClCompile>
+    <ClCompile Include="FunInstruction.cpp">
+      <Filter>Source Files\Instructions</Filter>
+    </ClCompile>
+    <ClCompile Include="PrintInstruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,9 +77,6 @@
     <ClInclude Include="SyntaxAnalyzer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeclarationInstruction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Variable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -69,9 +87,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AssigmentInstruction.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="DeclarationInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
     </ClInclude>
     <ClInclude Include="ExpressionInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="FunDeclarationInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="WhileInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="IfInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="FunInstruction.h">
+      <Filter>Header Files\Instructions</Filter>
+    </ClInclude>
+    <ClInclude Include="PrintInstruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

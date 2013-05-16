@@ -1,10 +1,13 @@
-﻿Build started 2013-05-16 23:06:35.
+﻿Build started 2013-05-16 23:23:16.
      1>Project "D:\C++\visual\Interpreter\Interpreter\Interpreter.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Touching "Debug\Interpreter.unsuccessfulbuild".
+         Creating "Debug\Interpreter.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt AssigmentInstruction.cpp
-         AssigmentInstruction.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt FunInstruction.cpp IfInstruction.cpp PrintInstruction.cpp
+         PrintInstruction.cpp
+         IfInstruction.cpp
+         FunInstruction.cpp
+         Generating Code...
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -13,12 +16,17 @@
          Debug\DeclarationInstruction.obj
          Debug\ExpressionInstruction.obj
          Debug\Fraction.obj
+         Debug\FunDeclarationInstruction.obj
+         Debug\FunInstruction.obj
+         Debug\IfInstruction.obj
          Debug\Interpreter.obj
          Debug\LexicalAnalyzer.obj
          Debug\main.obj
+         Debug\PrintInstruction.obj
          Debug\SourceReader.obj
          Debug\SyntaxAnalyzer.obj
          Debug\Variable.obj
+         Debug\WhileInstruction.obj
        Manifest:
          C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Interpreter.exe.embed.manifest" /manifest Debug\Interpreter.exe.intermediate.manifest
          All outputs are up-to-date.
@@ -32,4 +40,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.85
+Time Elapsed 00:00:05.71

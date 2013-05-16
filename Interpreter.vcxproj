@@ -78,23 +78,33 @@
     <ClCompile Include="DeclarationInstruction.cpp" />
     <ClCompile Include="ExpressionInstruction.cpp" />
     <ClCompile Include="Fraction.cpp" />
+    <ClCompile Include="FunDeclarationInstruction.cpp" />
+    <ClCompile Include="FunInstruction.cpp" />
+    <ClCompile Include="IfInstruction.cpp" />
     <ClCompile Include="Interpreter.cpp" />
     <ClCompile Include="LexicalAnalyzer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PrintInstruction.cpp" />
     <ClCompile Include="SourceReader.cpp" />
     <ClCompile Include="SyntaxAnalyzer.cpp" />
     <ClCompile Include="Variable.cpp" />
+    <ClCompile Include="WhileInstruction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssigmentInstruction.h" />
     <ClInclude Include="DeclarationInstruction.h" />
     <ClInclude Include="ExpressionInstruction.h" />
     <ClInclude Include="Fraction.h" />
+    <ClInclude Include="FunDeclarationInstruction.h" />
+    <ClInclude Include="FunInstruction.h" />
+    <ClInclude Include="IfInstruction.h" />
     <ClInclude Include="Interpreter.h" />
     <ClInclude Include="LexicalAnalyzer.h" />
+    <ClInclude Include="PrintInstruction.h" />
     <ClInclude Include="SourceReader.h" />
     <ClInclude Include="SyntaxAnalyzer.h" />
     <ClInclude Include="Variable.h" />
+    <ClInclude Include="WhileInstruction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
