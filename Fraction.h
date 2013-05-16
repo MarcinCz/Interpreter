@@ -7,7 +7,8 @@ class Fraction
 {
 public:
 	Fraction(void);
-	Fraction(int integer, int numerator, int denumeration, bool sign = true);
+	Fraction(string value);
+	Fraction(int integer, int numerator = 0, int denumeration = 1, bool sign = true);
 	~Fraction(void);
 
 	bool isZero();

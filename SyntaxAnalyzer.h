@@ -1,6 +1,7 @@
-#include "LexicalAnalyzer.h"
-
 #pragma once
+
+#include "LexicalAnalyzer.h"
+#include "Fraction.h"
 
 class Instruction
 {

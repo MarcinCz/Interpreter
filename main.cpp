@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
 	//s<<EOF;
 	//cout << s.str();
 
-	Fraction f1(1,2,3);
+	Fraction f1("");
 	Fraction f2(2,3,4,false);
-	std::cout<<(f2>=f1)<<endl;
+	std::cout<<(f1.toString())<<endl;
 	std::cout<<(f2<=f1)<<endl;
 	std::cout<<(f1>=f1)<<endl;
 	std::cout<<(f1<=f1)<<endl;

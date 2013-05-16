@@ -18,6 +18,37 @@ Fraction::Fraction(int _integer, int _numerator, int _denominator, bool _sign)
 	normalize();
 }
 
+Fraction::Fraction(string _value)
+{
+	sign = true;
+	numerator = 0;
+	denominator = 1;
+
+	unsigned pos = _value.find('-');
+	if(pos!=string::npos)  //negative
+	{
+		sign = false;
+		_value=_value.substr(1,_value.size()-1);
+	}
+	pos = _value.find('.');
+	if(pos == string::npos)  //only integer
+	{
+		stringstream(_value) >> integer;
+	}
+	else
+	{
+		string intS = _value.substr(0,pos);
+		stringstream(intS) >> integer;
+		string restS = _value.substr(pos+1, _value.size()-pos-1);
+		pos = restS.find('/');
+		string numS = restS.substr(0,pos);
+		stringstream(numS) >> numerator;;
+		string denS = restS.substr(pos+1, restS.size()-pos-1);
+		stringstream(denS) >> denominator;
+
+	}
+
+}
 Fraction::~Fraction(void)
 {
 	
