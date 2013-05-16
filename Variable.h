@@ -44,7 +44,7 @@ class Variable
 {
 public:
 	Variable(void);
-	Variable(string _name){  name = _name; value = VarValue(UnknownType, ""); }
+	Variable(string _name){ name = _name; value = VarValue(UnknownType, ""); }
 	~Variable(void);
 
 	VarValue getValue() { return value; }

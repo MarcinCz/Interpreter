@@ -2,13 +2,15 @@
 
 #include "LexicalAnalyzer.h"
 #include "Fraction.h"
+#include "Variable.h"
+#include <vector>
 
 class Instruction
 {
 public: 
-	virtual ~Instruction();
+	virtual ~Instruction(){}
 		
-	virtual bool execute();
+	virtual bool execute()=0;
 };
 
 class SyntaxAnalyzer
@@ -16,5 +18,7 @@ class SyntaxAnalyzer
 public:
 	SyntaxAnalyzer(void);
 	~SyntaxAnalyzer(void);
+private:
+	//vector<vector<Variable*>> VariableStack;
 };
 
