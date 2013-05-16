@@ -8,7 +8,7 @@ public:
 	virtual ~Instruction();
 		
 	virtual bool execute();
-}
+};
 
 class SyntaxAnalyzer
 {

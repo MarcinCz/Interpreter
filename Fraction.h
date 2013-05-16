@@ -18,10 +18,10 @@ public:
 	Fraction& operator*(const Fraction& f);
 	Fraction& operator/(const Fraction& f);
 	
-	Fraction& operator+=(const Fraction& f);
+	/*Fraction& operator+=(const Fraction& f);
 	Fraction& operator-=(const Fraction& f);
 	Fraction& operator*=(const Fraction& f);
-	Fraction& operator/=(const Fraction& f);
+	Fraction& operator/=(const Fraction& f);*/
 
 	bool operator==(const Fraction& f) const;
 	bool operator!=(const Fraction& f) const;
