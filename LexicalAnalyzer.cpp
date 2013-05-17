@@ -212,6 +212,9 @@ Symbol LexicalAnalyzer::getNextSymbol()
 			return getNextSymbol();
 		}
 		return Symbol(UnknownSym,"#", column, row);
+	case '^':
+		currentChar = srcReader->getNextChar();
+		return Symbol(CaretSym,"^", column, row);
 	}
 
 	//keywords, id

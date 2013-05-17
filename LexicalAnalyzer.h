@@ -42,9 +42,10 @@ enum SymbolType
 	RBraceSym,		// }					28
 	LBracketSym,	// (					29
 	RBracketSym,	// )					30
+	CaretSym,		// ^					31
 
-	EOFSym,			// no more symbols		31
-	UnknownSym		// unknown				32
+	EOFSym,			// no more symbols		32
+	UnknownSym		// unknown				33
 
 };
 

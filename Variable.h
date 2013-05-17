@@ -15,6 +15,16 @@ public:
 		type = _type;
 		value = _value;
 	}
+	Value(bool _boolVal)
+	{
+		type = BoolType;
+		boolVal = _boolVal;
+	}
+	Value(Fraction* _fractVal)
+	{
+		type = FractType;
+		fractVal = _fractVal;
+	}
 	~Value(){}
 
 	bool isFraction() { return type == FractType; }
@@ -28,6 +38,8 @@ public:
 	//void setValue(Fraction _fractVal) { fractVal = _fractVal; }
 	//void setValue(bool _boolVal) { boolVal = _boolVal; }
 	
+	Fraction *getFraction() { return fractVal; }
+	bool getBool() { return boolVal; }
 	Fraction toFraction() { return Fraction(value); }
 	bool toBool() { return (value == "true"); }  //TODO: moze zamiana fract<->bool
 
@@ -35,7 +47,7 @@ public:
 private:
 	VarType type;
 	string value;
-	Fraction fractVal;
+	Fraction* fractVal;
 	bool boolVal;
 };
 

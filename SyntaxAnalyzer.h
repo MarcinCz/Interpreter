@@ -6,9 +6,9 @@
 	Statement	= WhileStment | IfStment | FunStment;
 	WhileStment	= 'while', '(', Expression, ')', Block;
 	IfStment	= 'if', '(', Expression, ')', Block, ['else', Block];
-	FunStment	= 'function', ident, Params, FunBlock,
+	FunStment	= 'function', ident, Params, FunBlock;
 
-	Assigment	=  ident, '=', Expression;
+	Assigment	=  ident, '=', Expression,';';
 	Expression	= SimpleExp | SimpleExp, RelOp, SimpleExp;
 	SimpleExp	= AndExpr | AndExpr AndOp AndExpr;
 	AndExpr		= OrExpr | OrExpr OrOp OrExpr;
@@ -17,12 +17,12 @@
 	AndOp 		= '*' | '/' | 'and';
 	OrOp 		= '+' | '-' | 'or';
 
-	Params		= '(', [ident]{',', ident}, ')';
+	Params		= '(', ')' | '(', ident, {',', ident}, ')';
 	Block		= '{', {Instruction | WhileStment | IfStment}, '}';
 	FunBlock	= '{', {Instruction | WhileStment | IfStment}, 'return', Expression, ';}';
 	Instruction	= Declaration | Assigment | FunCall,';' | PrintCall |;
 	Declaration	= ident, ';';
-	FunCall		= ident, '(', [ident], {',', ident}, ')';
+	FunCall		= '^', ident, Params;
 	PrintCall	= 'print', '(', [ident | text], ')';
 ***********/
 
@@ -57,7 +57,7 @@ private:
 	bool IfStatement();
 	bool FunStatement();
 
-	bool Assigment();
+	//bool Assigment();
 	bool Expression();
 	bool SimpleExpression();
 	bool AndExpression();
@@ -70,7 +70,7 @@ private:
 	bool Block();
 	bool FunBlock();
 	bool InstructionS();
-	bool Declaration();
+	//bool Declaration();
 	bool FunCall();
 	bool PrintCall();
 	bool FractConst();
