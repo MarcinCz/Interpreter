@@ -41,7 +41,7 @@ enum SymbolType
 	LBraceSym,		// {					27
 	RBraceSym,		// }					28
 	LBracketSym,	// (					29
-	RBrackerSym,	// )					30
+	RBracketSym,	// )					30
 
 	EOFSym,			// no more symbols		31
 	UnknownSym		// unknown				32

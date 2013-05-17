@@ -200,7 +200,7 @@ Symbol LexicalAnalyzer::getNextSymbol()
 		return Symbol(LBracketSym,"(", column, row);
 	case ')':
 		currentChar = srcReader->getNextChar();
-		return Symbol(RBrackerSym,")", column, row);
+		return Symbol(RBracketSym,")", column, row);
 	case '#':
 		currentChar = srcReader->getNextChar();
 		if(currentChar == '#')

@@ -1,6 +1,8 @@
 #include <iostream>
 #include "SourceReader.h"
 #include "LexicalAnalyzer.h"
+#include "SyntaxAnalyzer.h"
+#include "Variable.h"
 #include "Fraction.h"
 #include <sstream>
 
@@ -29,8 +31,17 @@ int main(int argc, char *argv[])
 
 	Fraction f1("");
 	Fraction f2(2,3,4,false);
-	std::cout<<(f1.toString())<<endl;
+	/*std::cout<<(f1.toString())<<endl;
 	std::cout<<(f2<=f1)<<endl;
 	std::cout<<(f1>=f1)<<endl;
-	std::cout<<(f1<=f1)<<endl;
+	std::cout<<(f1<=f1)<<endl;*/
+
+	Value v = Value(BoolType,"true");
+	std::cout<<v.toBool()<<endl;
+	std::cout<<v.getType()<<endl;
+
+	Variable var("asd");
+	var.setValue(v);
+	std::cout<<var.getValue().toBool()<<endl;
+
 }

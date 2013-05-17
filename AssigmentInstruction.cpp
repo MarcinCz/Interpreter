@@ -12,5 +12,6 @@ AssigmentInstruction::~AssigmentInstruction(void)
 
 bool AssigmentInstruction::execute()
 {
+	cout<<"Assigment"<<endl;
 	return true;
 }

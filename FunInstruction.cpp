@@ -12,5 +12,6 @@ FunInstruction::~FunInstruction(void)
 
 bool FunInstruction::execute()
 {
+	cout<<"fundec"<<endl;
 	return true;
 }

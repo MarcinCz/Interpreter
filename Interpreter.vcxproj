@@ -87,7 +87,6 @@
     <ClCompile Include="PrintInstruction.cpp" />
     <ClCompile Include="SourceReader.cpp" />
     <ClCompile Include="SyntaxAnalyzer.cpp" />
-    <ClCompile Include="Variable.cpp" />
     <ClCompile Include="WhileInstruction.cpp" />
   </ItemGroup>
   <ItemGroup>

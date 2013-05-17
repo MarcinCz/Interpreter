@@ -1,13 +1,10 @@
-﻿Build started 2013-05-16 23:23:16.
+﻿Build started 2013-05-17 20:15:06.
      1>Project "D:\C++\visual\Interpreter\Interpreter\Interpreter.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\Interpreter.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\Interpreter.unsuccessfulbuild".
        ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt FunInstruction.cpp IfInstruction.cpp PrintInstruction.cpp
-         PrintInstruction.cpp
-         IfInstruction.cpp
-         FunInstruction.cpp
-         Generating Code...
+         D:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt SyntaxAnalyzer.cpp
+         SyntaxAnalyzer.cpp
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -25,19 +22,19 @@
          Debug\PrintInstruction.obj
          Debug\SourceReader.obj
          Debug\SyntaxAnalyzer.obj
-         Debug\Variable.obj
          Debug\WhileInstruction.obj
-       Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Interpreter.exe.embed.manifest" /manifest Debug\Interpreter.exe.intermediate.manifest
-         All outputs are up-to-date.
-       LinkEmbedManifest:
-         All outputs are up-to-date.
-         Interpreter.vcxproj -> D:\C++\visual\Interpreter\Debug\Interpreter.exe
-       FinalizeBuildStatus:
-         Deleting file "Debug\Interpreter.unsuccessfulbuild".
-         Touching "Debug\Interpreter.lastbuildstate".
-     1>Done Building Project "D:\C++\visual\Interpreter\Interpreter\Interpreter.vcxproj" (build target(s)).
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::InstructionS(void)" (?InstructionS@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::ProgramLine(void)" (?ProgramLine@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::Block(void)" (?Block@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::WhileStatement(void)" (?WhileStatement@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::FunBlock(void)" (?FunBlock@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::FunStatement(void)" (?FunStatement@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::Params(void)" (?Params@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::FunStatement(void)" (?FunStatement@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::RelOp(void)" (?RelOp@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::Expression(void)" (?Expression@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::AndOp(void)" (?AndOp@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::SimpleExpression(void)" (?SimpleExpression@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::OrOp(void)" (?OrOp@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::AndExpression(void)" (?AndExpression@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::FunCall(void)" (?FunCall@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::OrExpression(void)" (?OrExpression@SyntaxAnalyzer@@AAE_NXZ)
+     1>SyntaxAnalyzer.obj : error LNK2019: unresolved external symbol "private: bool __thiscall SyntaxAnalyzer::FractConst(void)" (?FractConst@SyntaxAnalyzer@@AAE_NXZ) referenced in function "private: bool __thiscall SyntaxAnalyzer::OrExpression(void)" (?OrExpression@SyntaxAnalyzer@@AAE_NXZ)
+     1>D:\C++\visual\Interpreter\Debug\Interpreter.exe : fatal error LNK1120: 9 unresolved externals
+     1>Done Building Project "D:\C++\visual\Interpreter\Interpreter\Interpreter.vcxproj" (build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:05.71
+Time Elapsed 00:00:02.68

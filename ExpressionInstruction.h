@@ -1,10 +1,12 @@
 #pragma once
 #include "syntaxanalyzer.h"
 
+
 enum ExpressionTreeNodeType
 {
 	variableNodeType,
 	valueNodeType,
+	funNodeType,
 	operatorNodeType,
 	unknowndNodeType,
 };
@@ -63,5 +65,10 @@ class ExpressionInstruction :
 public:
 	ExpressionInstruction(void);
 	~ExpressionInstruction(void);
+
+	bool execute();
+
+private:
+	ExpressionTreeNode* root;
 };
 

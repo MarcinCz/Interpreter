@@ -12,5 +12,6 @@ IfInstruction::~IfInstruction(void)
 
 bool IfInstruction::execute()
 {
+		cout<<"if"<<endl;
 	return true;
 }
