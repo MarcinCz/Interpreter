@@ -49,6 +49,7 @@ private:
 	string value;
 	Fraction* fractVal;
 	bool boolVal;
+	
 };
 
 
@@ -61,11 +62,16 @@ public:
 
 	Value getValue() { return value; }
 	string getName() { return name; }
+	int getLevel() {return level;}
+
 	void setValue(Value _value) { value = _value; }
 	void setName(string _name) { name = _name; }
+	void setLevel(int _level) {level = _level;}
+		
 
 private:
 	string name;
 	Value value;
+	int level;			//variable stack level
 };
 

@@ -2,6 +2,7 @@
 #include "SourceReader.h"
 #include "LexicalAnalyzer.h"
 #include "SyntaxAnalyzer.h"
+#include "Interpreter.h"
 #include "Variable.h"
 #include "Fraction.h"
 #include <sstream>
@@ -21,7 +22,10 @@ int main(int argc, char *argv[])
 	SyntaxAnalyzer sa(la);
 	sa.Program();
 
-
+	//Instruction i(IfInstr);
+	//AssigmentInstruction a;
+	//a.setType(AssigmentInst);
+	//cout << a.getType() <<endl;
 
 	/*char r='a';
 	while(r != EOF)
@@ -49,4 +53,26 @@ int main(int argc, char *argv[])
 	//var.setValue(v);
 	//std::cout<<var.getValue().toBool()<<endl;
 
+
+
+	/*Interpreter i;
+	i.increaseStackLevel();
+	i.increaseStackLevel();*/
+
+	/*vector< vector <int> > v;
+	vector<int> a;
+	a.push_back(1);
+	a.push_back(2);
+	vector<int> b;
+	b.push_back(3);
+	b.push_back(4);
+
+	v.push_back(a);
+	v.push_back(b);
+
+	cout << v.at(0).at(0);*/
+	
+	
+	
+	cout << "asd";
 }

@@ -38,14 +38,30 @@ public:
 	Variable* getVariable() { return nodeVariable; }
 	SymbolType getOperator() { return nodeOperator; }
 	Value* getValue() { return nodeValue; }
+	Instruction* getFunInstruction() { return nodeFunInstruction; }
+
+	void setVariable(Variable* _nodeVariable)
+	{
+		type = variableNodeType;
+		nodeVariable = _nodeVariable;
+	}
+	void setValue(Value* _nodeValue)
+	{
+		type = valueNodeType;
+		nodeValue = _nodeValue;
+	}
+	void setOperator(SymbolType _nodeOperator)
+	{
+		type = operatorNodeType;
+		nodeOperator = _nodeOperator;
+	}
 	
 	ExpressionTreeNode* getParent() { return parent; }
 	ExpressionTreeNode* getChildAt(int pos) {return children.at(pos); }
+	ExpressionTreeNodeType getType() { return type; }
 
 	void setParent(ExpressionTreeNode* _parent) { parent = _parent; }
 	void addChild(ExpressionTreeNode* _child) { children.push_back(_child); }
-
-
 
 private:
 	ExpressionTreeNode* parent;
@@ -56,6 +72,7 @@ private:
 	Variable* nodeVariable;
 	Value* nodeValue;
 	SymbolType nodeOperator;
+	Instruction* nodeFunInstruction;
 };
 
 /*********************ExpressionInstruction*********************************/
@@ -64,9 +81,11 @@ class ExpressionInstruction :
 {
 public:
 	ExpressionInstruction(void);
+	ExpressionInstruction(ExpressionTreeNode *root);
 	~ExpressionInstruction(void);
 
 	bool execute();
+	ExpressionTreeNode* getRoot();
 
 private:
 	ExpressionTreeNode* root;

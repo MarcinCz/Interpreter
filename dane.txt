@@ -1,13 +1,13 @@
-function reverseBool(a)
+function reverseBool(aaa)
 {
-	return !a;
+return !a;
 }
 
 a;
 b;
 
 a=(false or 2>1.1/2) and 1!=2.2/3;
-b=^reverseBool(a);
+^reverseBool(aaaa);
 
 x;
 y;

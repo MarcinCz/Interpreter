@@ -5,7 +5,11 @@ PrintInstruction::PrintInstruction(void)
 {
 }
 
-
+PrintInstruction::PrintInstruction(string _toPrint, bool _isText)
+{
+	toPrint =_toPrint;
+	isText = _isText;
+}
 PrintInstruction::~PrintInstruction(void)
 {
 }

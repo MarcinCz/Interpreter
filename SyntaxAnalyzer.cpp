@@ -53,15 +53,23 @@ bool SyntaxAnalyzer::Program()
 
 bool SyntaxAnalyzer::ProgramLine()
 {
+	Instruction* i;
+	//i = Statement();
 	if(Statement())
-		return true;
-	else if(InstructionS())
 		return true;
 	else 
 	{
-		errorInfo("statement or instruction");
-		return false;
+		i = InstructionS();
+		if(i != NULL)
+		{
+			InstructionList.push_back(i);
+			return true;
+		}
 	}
+	
+	//errorInfo("statement or instruction");   //TODO: zle pokazuje kolumne
+	return false;
+
 
 }
 
@@ -244,18 +252,21 @@ bool SyntaxAnalyzer::FunStatement()
 
 bool SyntaxAnalyzer::Expression()  //TODO:zwraca
 {
+	SymbolType s;
 	ExpressionInstruction w;
+	ExpressionTreeNode* node = new ExpressionTreeNode();
+
+
 	if(SimpleExpression())
 	{
-		if(RelOp())
+		s = RelOp();
+		if(s != NullSym)
 		{
 			if(SimpleExpression())
 			{
 				w.execute();
 				return true;
 			}
-			else
-				return false;
 		}
 		else
 		{
@@ -263,37 +274,39 @@ bool SyntaxAnalyzer::Expression()  //TODO:zwraca
 			return true;
 		}
 	}
-	else
-		return false;
+	
+	return false;
 }
 
 bool SyntaxAnalyzer::SimpleExpression()
 {
+	SymbolType s;
 	if(AndExpression())
 	{
-		if(AndOp())
+		s = AndOp();
+		if(s != NullSym)
 		{
 			if(AndExpression())
 			{
 				return true;
 			}
-			else
-				return false;
 		}
 		else
 		{
 			return true;
 		}
 	}
-	else
-		return false;
+
+	return false;
 }
 
 bool SyntaxAnalyzer::AndExpression()
 {
+	SymbolType s;
 	if(OrExpression())
 	{
-		if(OrOp())
+		s = OrOp();
+		if(s != NullSym)
 		{
 			if(OrExpression())
 			{
@@ -313,6 +326,9 @@ bool SyntaxAnalyzer::AndExpression()
 
 bool SyntaxAnalyzer::OrExpression()
 {
+	Instruction* i;
+	SymbolType s;
+	Fraction* f;
 	if(currentSymbol.getSymbolType() == NotSym)
 	{
 		advance();
@@ -327,25 +343,31 @@ bool SyntaxAnalyzer::OrExpression()
 			}
 		}
 	}
-	else if(currentSymbol.getSymbolType() == IdentSym)
+
+	if(currentSymbol.getSymbolType() == IdentSym)
 	{
 		advance();
 		return true;
 	}
-	else if(FractConst())
+
+	f = FractConst();
+	if(f != NULL)
 	{
 		return true;
 	}
-	else if(currentSymbol.getSymbolType() == BoolValSym)
+
+	if(currentSymbol.getSymbolType() == BoolValSym)
 	{
 		advance();
 		return true;
 	}
-	else if(FunCall())
+
+	i = FunCall();
+	if(i != NULL)
 	{
 		return true;
 	}
-	else if(currentSymbol.getSymbolType() == LBracketSym)
+	if(currentSymbol.getSymbolType() == LBracketSym)
 	{
 		advance();
 		if(Expression())
@@ -370,82 +392,82 @@ bool SyntaxAnalyzer::OrExpression()
 	}
 }
 
-bool SyntaxAnalyzer::RelOp()
+SymbolType SyntaxAnalyzer::RelOp()
 {
 	if(currentSymbol.getSymbolType() == LessEqSym)
 	{
 		advance();
-		return true;
+		return LessEqSym;
 	}
 	if(currentSymbol.getSymbolType() == GreaterEqSym)
 	{
 		advance();
-		return true;
+		return GreaterEqSym;
 	}
 	if(currentSymbol.getSymbolType() == GreaterSym)
 	{
 		advance();
-		return true;
+		return GreaterSym;
 	}
 	if(currentSymbol.getSymbolType() == LessSym)
 	{
 		advance();
-		return true;
+		return LessSym;
 	}
 	if(currentSymbol.getSymbolType() == EqualSym)
 	{
 		advance();
-		return true;
+		return EqualSym;
 	}
 	if(currentSymbol.getSymbolType() == NotEqualSym)
 	{
 		advance();
-		return true;
+		return NotEqualSym;
 	}
 	//errorInfo("relation-type operator");
-	return false;
+	return NullSym;
 }
 
-bool SyntaxAnalyzer::AndOp()
+SymbolType SyntaxAnalyzer::AndOp()
 {
 	if(currentSymbol.getSymbolType() == MultiSym)
 	{
 		advance();
-		return true;
+		return MultiSym;
 	}
 	if(currentSymbol.getSymbolType() == DivideSym)
 	{
 		advance();
-		return true;
+		return DivideSym;
 	}
 	if(currentSymbol.getSymbolType() == AndSym)
 	{
 		advance();
-		return true;
+		return AndSym;
 	}
 	//errorInfo("and-type operator");
-	return false;
+	return NullSym;
 }
 
-bool SyntaxAnalyzer::OrOp()
+SymbolType SyntaxAnalyzer::OrOp()
 {
 	if(currentSymbol.getSymbolType() == PlusSym)
 	{
 		advance();
-		return true;
+		return PlusSym;
 	}
 	if(currentSymbol.getSymbolType() == MinusSym)
 	{
 		advance();
-		return true;
+		return MinusSym;
 	}
 	if(currentSymbol.getSymbolType() == OrSym)
 	{
 		advance();
-		return true;
+		return OrSym;
 	}
 	//errorInfo("or-type operator");
-	return false;
+	return NullSym;
 }
 
 bool SyntaxAnalyzer::Params()
@@ -509,6 +531,7 @@ bool SyntaxAnalyzer::Params()
 
 bool SyntaxAnalyzer::Block()
 {
+	Instruction* i;
 	if(currentSymbol.getSymbolType() == LBraceSym)						//{
 	{
 		advance();
@@ -529,8 +552,10 @@ bool SyntaxAnalyzer::Block()
 					{
 						continue;
 					}
-					if(InstructionS())
+					i = InstructionS();
+					if(i != NULL)
 					{
+						InstructionList.push_back(i);
 						continue;
 					}
 					else break;
@@ -552,6 +577,7 @@ bool SyntaxAnalyzer::Block()
 
 bool SyntaxAnalyzer::FunBlock()
 {
+	Instruction* i;
 	if(currentSymbol.getSymbolType() == LBraceSym)						//{
 	{
 		advance();
@@ -572,8 +598,10 @@ bool SyntaxAnalyzer::FunBlock()
 					{
 						continue;
 					}
-					if(InstructionS())
+					i = InstructionS();
+					if(i != NULL)
 					{
+						InstructionList.push_back(i);
 						continue;
 					}
 					else break;
@@ -618,14 +646,16 @@ bool SyntaxAnalyzer::FunBlock()
 		return false;
 }
 
-bool SyntaxAnalyzer::InstructionS()
+Instruction* SyntaxAnalyzer::InstructionS()
 {
-	if(FunCall())
+	Instruction* i;
+	i = FunCall();
+	if(i != NULL)
 	{
 		if(currentSymbol.getSymbolType() == SemicolonSym)
 		{
 			advance();
-			return true;
+			return i;
 		}
 		else
 		{
@@ -636,16 +666,20 @@ bool SyntaxAnalyzer::InstructionS()
 
 	if(currentSymbol.getSymbolType() == IdentSym)
 	{
+		string var = currentSymbol.getValue();
 		advance();
-		AssigmentInstruction a;
-		DeclarationInstruction d;
+		
+		
+		
 		if(currentSymbol.getSymbolType() == SemicolonSym)			//declaration
 		{
 			advance();
-			d.execute();
-			return true;
+			DeclarationInstruction* d = new DeclarationInstruction(var);
+			//InstructionList.pu
+			
+			return d;
 		}
-		if(currentSymbol.getSymbolType() == AssigmentSym)				//assigment
+		if(currentSymbol.getSymbolType() == AssigmentSym)			//assigment
 		{
 			advance();
 			if(Expression())
@@ -653,8 +687,9 @@ bool SyntaxAnalyzer::InstructionS()
 				if(currentSymbol.getSymbolType() == SemicolonSym)
 				{
 					advance();
-					a.execute();
-					return true;
+					AssigmentInstruction* a = new AssigmentInstruction();
+					//a.execute();
+					return a;
 				}
 				else
 				{
@@ -668,16 +703,17 @@ bool SyntaxAnalyzer::InstructionS()
 			}
 		}
 	}
-	if(PrintCall())
+	i = PrintCall();			
+	if(i != NULL)				//TODO:zwraca cos printcall
 	{
-		return true;
+		return i;
 	}
 	return false;
 }
 
-bool SyntaxAnalyzer::FunCall()
+Instruction* SyntaxAnalyzer::FunCall()
 {
-	FunInstruction f;
+	FunInstruction* f;
 	if(currentSymbol.getSymbolType() == CaretSym)
 	{
 		advance();
@@ -686,8 +722,9 @@ bool SyntaxAnalyzer::FunCall()
 			advance();
 			if(Params())
 			{
-				f.execute();
-				return true;
+				//f.execute();
+				f = new FunInstruction();
+				return f;
 			}
 			else
 			{
@@ -706,32 +743,39 @@ bool SyntaxAnalyzer::FunCall()
 	}
 }
 
-bool SyntaxAnalyzer::PrintCall()
+Instruction* SyntaxAnalyzer::PrintCall()
 {
-	PrintInstruction p;
+	PrintInstruction* p;
+	string text;
+	bool isText;
+
 	if(currentSymbol.getSymbolType() == PrintSym)							//print
 	{
 		advance();
 		if(currentSymbol.getSymbolType() == LBracketSym)					//(
 		{
 			advance();
-			if(currentSymbol.getSymbolType() == IdentSym)					//id
+			if(currentSymbol.getSymbolType() == IdentSym)					//id												//id
 			{
+				text = currentSymbol.getValue();
+				isText = 0;
 				advance();
 			}
 			else if(currentSymbol.getSymbolType() == TextSym)				//text
 			{
+				text = currentSymbol.getValue();
+				isText = 1;
 				advance();
 			}
 			
-			if(currentSymbol.getSymbolType() == RBracketSym)					//)
+			if(currentSymbol.getSymbolType() == RBracketSym)				//)
 			{
 				advance();
 				if(currentSymbol.getSymbolType() == SemicolonSym)			//;
 				{
 					advance();
-					p.execute();
-					return true;
+					p = new PrintInstruction(text, isText);		//TODO: zmienic konstruktor
+					return p;
 				}
 				else
 				{
@@ -757,7 +801,7 @@ bool SyntaxAnalyzer::PrintCall()
 		return false;
 	}
 }
-bool SyntaxAnalyzer::FractConst()
+Fraction* SyntaxAnalyzer::FractConst()
 {
 	stringstream fractStream;
 	if(currentSymbol.getSymbolType() == MinusSym)						//-
@@ -786,9 +830,9 @@ bool SyntaxAnalyzer::FractConst()
 					{
 						fractStream << currentSymbol.getValue();
 						advance();
-						Fraction f(fractStream.str());
-						cout << f.toString() << endl;
-						return true;
+						Fraction* f = new Fraction(fractStream.str());
+						//cout << f->toString() << endl;
+						return f;
 					}
 					else
 					{
@@ -812,9 +856,9 @@ bool SyntaxAnalyzer::FractConst()
 		}
 		else
 		{
-			Fraction f(fractStream.str());
-			cout << f.toString() << endl;
-			return true;
+			Fraction* f = new Fraction(fractStream.str());
+			//cout << f.toString() << endl;
+			return f;
 		}
 	}
 	else

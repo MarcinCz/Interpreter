@@ -5,47 +5,50 @@
 
 enum SymbolType
 {
-	IdentSym,		// identifier			0
-	IntegerSym,		// integer				1
-	TextSym,		// "text"				2
+	NullSym,		// nothing				0
+
+	IdentSym,		// identifier			1
+	IntegerSym,		// integer				2
+	TextSym,		// "text"				3
 
 	//keywords
-	BoolValSym,		// true, false			3
-	WhileSym,		// while				4
-	IfSym,			// if					5
-	ElseSym,		// else					6
-	FunctionSym,	// function				7
-	ReturnSym,		// return				8
-	PrintSym,		// print				9
+	BoolValSym,		// true, false			4
+	WhileSym,		// while				5
+	IfSym,			// if					6
+	ElseSym,		// else					7
+	FunctionSym,	// function				8
+	ReturnSym,		// return				9
+	PrintSym,		// print				10
 
 	//operators
-	PlusSym,		// +					10
-	MinusSym,		// -					11
-	OrSym,			// or					12
-	MultiSym,		// *					13
-	DivideSym,		// /					14
-	AndSym,			// and					15
-	GreaterSym,		// >					16
-	LessSym,		// <					17
-	EqualSym,		// ==					18
-	NotEqualSym,	// !=					19
-	GreaterEqSym,	// >=					20
-	LessEqSym,		// <=					21
-	AssigmentSym,	// =					22
-	NotSym,			// !					23
+	PlusSym,		// +					11
+	MinusSym,		// -					12
+	OrSym,			// or					13
+	MultiSym,		// *					14
+	DivideSym,		// /					15
+	AndSym,			// and					16
+	GreaterSym,		// >					17
+	LessSym,		// <					18
+	EqualSym,		// ==					19
+	NotEqualSym,	// !=					20
+	GreaterEqSym,	// >=					21
+	LessEqSym,		// <=					22
+	AssigmentSym,	// =					23
+	NotSym,			// !					24
 
 	//special
-	DotSym,			// .					24
-	CommaSym,		// ,					25
-	SemicolonSym,	// ;					26
-	LBraceSym,		// {					27
-	RBraceSym,		// }					28
-	LBracketSym,	// (					29
-	RBracketSym,	// )					30
-	CaretSym,		// ^					31
+	DotSym,			// .					25
+	CommaSym,		// ,					26
+	SemicolonSym,	// ;					27
+	LBraceSym,		// {					28
+	RBraceSym,		// }					29
+	LBracketSym,	// (					30
+	RBracketSym,	// )					31
+	CaretSym,		// ^					32
 
-	EOFSym,			// no more symbols		32
-	UnknownSym		// unknown				33
+	EOFSym,			// no more symbols		33
+	UnknownSym,		// unknown				34
+	
 
 };
 
@@ -59,6 +62,7 @@ public:
 
 	void setPosition(int column, int row);
 	pair<int,int> getPosition();
+
 	SymbolType getSymbolType();
 	string getValue();
 
@@ -79,6 +83,8 @@ public:
 	~LexicalAnalyzer(void);
 
 	Symbol getNextSymbol();
+	int getColumn();
+	int getRow();
 	//void setSourceReader();
 
 private:

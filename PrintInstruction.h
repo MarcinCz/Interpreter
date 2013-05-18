@@ -5,8 +5,14 @@ class PrintInstruction :
 {
 public:
 	PrintInstruction(void);
+	PrintInstruction(string toPrint, bool isText);
 	~PrintInstruction(void);
 
 	bool execute();
+
+private:
+	string toPrint;
+	bool isText;
+
 };
 

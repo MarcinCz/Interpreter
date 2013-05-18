@@ -72,6 +72,16 @@ LexicalAnalyzer::LexicalAnalyzer(SourceReader* _srcReader)
 	currentChar = srcReader->getNextChar();		//first character
 }
 
+int LexicalAnalyzer::getColumn()
+{
+	return srcReader->getPosition().first;
+}
+
+int LexicalAnalyzer::getRow()
+{
+	return srcReader->getPosition().second;
+}
+
 Symbol LexicalAnalyzer::getNextSymbol()
 {
 	stringstream symValue;
@@ -84,13 +94,19 @@ Symbol LexicalAnalyzer::getNextSymbol()
 	if(currentChar == EOF)
 		return Symbol(EOFSym, symValue.str(), column, row);
 
+	int tab=0;
 	//white space 
 	while(isspace(currentChar))
 	{
+		if(currentChar == '\t') tab+=2;
 		currentChar = srcReader->getNextChar();
 		if(currentChar == EOF)
 			return Symbol(EOFSym, symValue.str(), column, row);
 	}
+
+	position = srcReader->getPosition();
+	column = position.first + tab;
+	row = position.second;
 
 	//integer
 	if(isdigit(currentChar))
@@ -121,8 +137,10 @@ Symbol LexicalAnalyzer::getNextSymbol()
 		while(currentChar != '"')
 		{
 			if(currentChar == EOF)
+			{
+				cout << "Unknown symbol at column: "<<column<<",line: "<<row<<". Expected closing '\"'"<<endl;
 				return Symbol(UnknownSym,symValue.str(), column, row, "Unknown symbol. Expected closing '\"'");
-			
+			}
 			symValue << currentChar;
 			currentChar = srcReader->getNextChar();
 		}
@@ -211,6 +229,7 @@ Symbol LexicalAnalyzer::getNextSymbol()
 			}
 			return getNextSymbol();
 		}
+		cout << "Unknown symbol at column: "<<column<<",line: "<<row<<". Expected '#'"<<endl;
 		return Symbol(UnknownSym,"#", column, row);
 	case '^':
 		currentChar = srcReader->getNextChar();
@@ -271,5 +290,6 @@ Symbol LexicalAnalyzer::getNextSymbol()
 
 	symValue << currentChar;
 	currentChar = srcReader->getNextChar();
+	cout << "Unknown symbol at column: "<<column<<",line: "<<row<<endl;
 	return Symbol(UnknownSym, symValue.str(), column, row, "Unknown symbol");
 }

@@ -32,13 +32,34 @@
 
 #include <vector>
 
+enum InstructionType
+{
+	AssigmentInst,
+	DeclarationInst,
+	ExpressionInst,
+	FunDeclarationInstr,
+	FunInstr,
+	IfInstr,
+	PrintInstr,
+	WhileInstr,
+};
+
 class Instruction
 {
 public: 
-	//Instruction(){}
+	/*Instruction(){}
+	Instruction(InstructionType _type)
+	{
+		type = _type;
+	}*/
 	virtual ~Instruction(){}
 		
 	virtual bool execute()=0;
+	virtual InstructionType getType() {return type;};
+	virtual void setType(InstructionType _type) { type= _type;};
+
+protected:
+	InstructionType type;
 };
 
 class SyntaxAnalyzer
@@ -62,18 +83,25 @@ private:
 	bool SimpleExpression();
 	bool AndExpression();
 	bool OrExpression();
-	bool RelOp();
-	bool AndOp();
-	bool OrOp();
+	SymbolType RelOp();
+	SymbolType AndOp();
+	SymbolType OrOp();
+
+	/*ExpressionTreeNode* Expression();
+	ExpressionTreeNode* SimpleExpression();
+	ExpressionTreeNode* AndExpression();
+	ExpressionTreeNode* OrExpression();
+	SymbolType RelOp();
+	SymbolType AndOp();
+	SymbolType OrOp();*/
 
 	bool Params();
 	bool Block();
 	bool FunBlock();
-	bool InstructionS();
-	//bool Declaration();
-	bool FunCall();
-	bool PrintCall();
-	bool FractConst();
+	Instruction* InstructionS();
+	Instruction* FunCall();
+	Instruction* PrintCall();
+	Fraction* FractConst();
 
 	void advance();
 	void errorInfo(string info);
