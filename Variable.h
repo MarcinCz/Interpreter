@@ -1,5 +1,6 @@
 #pragma once
-#include "SyntaxAnalyzer.h"
+#include "LexicalAnalyzer.h"
+#include "Fraction.h"
 
 enum VarType{
 	FractType,
@@ -25,7 +26,7 @@ public:
 		type = FractType;
 		fractVal = _fractVal;
 	}
-	~Value(){}
+	~Value(){ if(type = FractType) delete fractVal;}
 
 	bool isFraction() { return type == FractType; }
 	bool isBool() { return type == BoolType; }

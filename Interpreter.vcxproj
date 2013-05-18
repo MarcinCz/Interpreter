@@ -97,6 +97,7 @@
     <ClInclude Include="FunDeclarationInstruction.h" />
     <ClInclude Include="FunInstruction.h" />
     <ClInclude Include="IfInstruction.h" />
+    <ClInclude Include="Instruction.h" />
     <ClInclude Include="Interpreter.h" />
     <ClInclude Include="LexicalAnalyzer.h" />
     <ClInclude Include="PrintInstruction.h" />

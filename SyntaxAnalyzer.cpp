@@ -250,135 +250,222 @@ bool SyntaxAnalyzer::FunStatement()
 //		return false;
 //}
 
-bool SyntaxAnalyzer::Expression()  //TODO:zwraca
+ExpressionTreeNode* SyntaxAnalyzer::Expression()  //TODO:zwraca
 {
 	SymbolType s;
 	ExpressionInstruction w;
-	ExpressionTreeNode* node = new ExpressionTreeNode();
+	ExpressionTreeNode* node;
+	ExpressionTreeNode* returnNode;
 
-
-	if(SimpleExpression())
+	node = SimpleExpression();
+	if(node != NULL)
 	{
+		returnNode = new ExpressionTreeNode();
+		node->setParent(returnNode);
+		returnNode->addChild(node);
+
 		s = RelOp();
 		if(s != NullSym)
 		{
-			if(SimpleExpression())
+			node = new ExpressionTreeNode(s);
+			node->setParent(returnNode);
+			returnNode->addChild(node);
+
+			node = SimpleExpression();
+			if(node != NULL)
 			{
-				w.execute();
-				return true;
+				node->setParent(returnNode);
+				returnNode->addChild(node);
+				return returnNode;
+			}
+			else
+			{
+				delete node;
+				return false;
 			}
 		}
 		else
 		{
-			w.execute();
-			return true;
+			//w.execute();
+			return node;
 		}
 	}
 	
 	return false;
 }
 
-bool SyntaxAnalyzer::SimpleExpression()
+ExpressionTreeNode* SyntaxAnalyzer::SimpleExpression()
 {
 	SymbolType s;
-	if(AndExpression())
+
+	ExpressionTreeNode* node;
+	ExpressionTreeNode* returnNode;
+
+	node = OrExpression();
+	if(node != NULL)									//OrExpr
 	{
-		s = AndOp();
-		if(s != NullSym)
+		returnNode = new ExpressionTreeNode();
+		node->setParent(returnNode);
+		returnNode->addChild(node);
+
+		for(int i=0; ; i++)
 		{
-			if(AndExpression())
+			s = OrOp();
+			if(s != NullSym)								//OrOp
 			{
-				return true;
+				node = new ExpressionTreeNode(s);
+				node->setParent(returnNode);
+				returnNode->addChild(node);
+
+				node = OrExpression();
+				if(node != NULL)							//OrExpr
+				{
+					node->setParent(returnNode);
+					returnNode->addChild(node);
+					
+				}
+				else
+				{
+					delete node;
+					return false;
+				}
 			}
-		}
-		else
-		{
-			return true;
+			else
+			{
+				if(i = 0)
+					return node;
+				else
+					return returnNode;
+			}
 		}
 	}
 
 	return false;
 }
 
-bool SyntaxAnalyzer::AndExpression()
+ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 {
 	SymbolType s;
-	if(OrExpression())
+	ExpressionTreeNode* node;
+	ExpressionTreeNode* returnNode;
+
+	node = AndExpression();
+	if(node != NULL)									//AndExpr
 	{
-		s = OrOp();
-		if(s != NullSym)
+		returnNode = new ExpressionTreeNode();
+		node->setParent(returnNode);
+		returnNode->addChild(node);
+
+		
+		for(int i=0; ; i++)
 		{
-			if(OrExpression())
+			s = AndOp();
+			if(s != NullSym)								//AndOp
 			{
-				return true;
+				node = new ExpressionTreeNode(s);
+				node->setParent(returnNode);
+				returnNode->addChild(node);
+
+				node = AndExpression();
+				if(node != NULL)							//AndExpr
+				{
+					node->setParent(returnNode);
+					returnNode->addChild(node);
+					//return returnNode;
+				}
+				else
+				{
+					delete node;
+					return false;
+				}
 			}
 			else
-				return false;
+			{
+				if(i = 0)
+					return node;
+				else
+					return returnNode;
+			}
 		}
-		else
-		{
-			return true;
-		}
+
 	}
 	else
 		return false;
 }
 
-bool SyntaxAnalyzer::OrExpression()
+ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 {
 	Instruction* i;
 	SymbolType s;
 	Fraction* f;
-	if(currentSymbol.getSymbolType() == NotSym)
-	{
+	ExpressionTreeNode* node;
+	ExpressionTreeNode* returnNode;
+
+
+	if(currentSymbol.getSymbolType() == NotSym)						// !
+	{	
+		returnNode = new ExpressionTreeNode(NotSym);
 		advance();
+
+		node = AndExpression();										//AndExpr
+		if(node)
 		{
-			if(OrExpression())
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			node->setParent(returnNode);
+			returnNode->addChild(node);
+			return returnNode;
+		}
+		else
+		{
+			delete returnNode;
+			return false;
 		}
 	}
 
-	if(currentSymbol.getSymbolType() == IdentSym)
+	if(currentSymbol.getSymbolType() == IdentSym)					//id
 	{
+		returnNode = new ExpressionTreeNode(new Variable(currentSymbol.getValue()));
 		advance();
-		return true;
+		return returnNode;
 	}
 
 	f = FractConst();
-	if(f != NULL)
+	if(f != NULL)													//fract
 	{
-		return true;
+		returnNode = new ExpressionTreeNode(new Value(f));
+		return returnNode;
 	}
 
-	if(currentSymbol.getSymbolType() == BoolValSym)
+	if(currentSymbol.getSymbolType() == BoolValSym)					//boolVal
 	{
+		if(currentSymbol.getValue() == "true")
+			returnNode = new ExpressionTreeNode(new Value(true));
+		else
+			returnNode = new ExpressionTreeNode(new Value(false));
 		advance();
-		return true;
+		return returnNode;
 	}
 
 	i = FunCall();
-	if(i != NULL)
+	if(i != NULL)													//funCall
 	{
-		return true;
+		returnNode = new ExpressionTreeNode(i);
+		return returnNode;
 	}
-	if(currentSymbol.getSymbolType() == LBracketSym)
+	if(currentSymbol.getSymbolType() == LBracketSym)				//(
 	{
 		advance();
-		if(Expression())
+		node = Expression();
+		if(node != NULL)											//expr
 		{
-			if(currentSymbol.getSymbolType() == RBracketSym)
+			if(currentSymbol.getSymbolType() == RBracketSym)		//)
 			{
+				
 				advance();
-				return true;
+				return node;
 			}
 			else
 			{
+				delete node;
 				errorInfo("')'");
 				return false;
 			}
@@ -649,6 +736,9 @@ bool SyntaxAnalyzer::FunBlock()
 Instruction* SyntaxAnalyzer::InstructionS()
 {
 	Instruction* i;
+	ExpressionTreeNode* node;
+
+
 	i = FunCall();
 	if(i != NULL)
 	{
@@ -682,7 +772,8 @@ Instruction* SyntaxAnalyzer::InstructionS()
 		if(currentSymbol.getSymbolType() == AssigmentSym)			//assigment
 		{
 			advance();
-			if(Expression())
+			node = Expression();
+			if(node != NULL)
 			{
 				if(currentSymbol.getSymbolType() == SemicolonSym)
 				{

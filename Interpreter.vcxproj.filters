@@ -107,5 +107,8 @@
     <ClInclude Include="PrintInstruction.h">
       <Filter>Header Files\Instructions</Filter>
     </ClInclude>
+    <ClInclude Include="Instruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

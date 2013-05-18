@@ -1,5 +1,6 @@
 #pragma once
-#include "syntaxanalyzer.h"
+#include "Instruction.h"
+
 class FunInstruction :
 	public Instruction
 {

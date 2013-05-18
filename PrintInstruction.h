@@ -1,5 +1,5 @@
 #pragma once
-#include "syntaxanalyzer.h"
+#include "Instruction.h"
 class PrintInstruction :
 	public Instruction
 {

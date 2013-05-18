@@ -1,5 +1,6 @@
 #pragma once
-#include "SyntaxAnalyzer.h"
+
+#include "Instruction.h"
 
 class AssigmentInstruction:
 	public Instruction

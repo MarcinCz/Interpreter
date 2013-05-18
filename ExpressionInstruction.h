@@ -1,5 +1,8 @@
 #pragma once
-#include "syntaxanalyzer.h"
+
+#include "Instruction.h"
+#include "Variable.h"
+#include <vector>
 
 
 enum ExpressionTreeNodeType
@@ -31,6 +34,11 @@ public:
 	{
 		type = valueNodeType;
 		nodeValue = _nodeValue;
+	}
+	ExpressionTreeNode(Instruction* _nodeFunInstruction)
+	{
+		type = funNodeType;
+		nodeFunInstruction = _nodeFunInstruction;
 	}
 	~ExpressionTreeNode(){}
 
@@ -74,6 +82,7 @@ private:
 	SymbolType nodeOperator;
 	Instruction* nodeFunInstruction;
 };
+
 
 /*********************ExpressionInstruction*********************************/
 class ExpressionInstruction :

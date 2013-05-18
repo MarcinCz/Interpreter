@@ -10,12 +10,13 @@
 
 	Assigment	=  ident, '=', Expression,';';
 	Expression	= SimpleExp | SimpleExp, RelOp, SimpleExp;
-	SimpleExp	= AndExpr | AndExpr AndOp AndExpr;
-	AndExpr		= OrExpr | OrExpr OrOp OrExpr;
-	OrExpr		= '!',OrExpr | ident | fractconst | boolconst | FunCall | '(',Expression,')';
+	SimpleExp	= OrExpr { OrOp OrExpr };
+	OrExpr		= AndExpr { AndOp AndExpr };
+	AndExpr		= '!',AndExpr | ident | fractconst | boolconst | FunCall | '(',Expression,')';
 	RelOp 		= '<=' | '>=' | '>' | '<' | '==' | '!=';
-	AndOp 		= '*' | '/' | 'and';
 	OrOp 		= '+' | '-' | 'or';
+	AndOp 		= '*' | '/' | 'and';
+	
 
 	Params		= '(', ')' | '(', ident, {',', ident}, ')';
 	Block		= '{', {Instruction | WhileStment | IfStment}, '}';
@@ -29,38 +30,9 @@
 #include "LexicalAnalyzer.h"
 #include "Fraction.h"
 #include "Variable.h"
-
+#include "ExpressionInstruction.h"
 #include <vector>
 
-enum InstructionType
-{
-	AssigmentInst,
-	DeclarationInst,
-	ExpressionInst,
-	FunDeclarationInstr,
-	FunInstr,
-	IfInstr,
-	PrintInstr,
-	WhileInstr,
-};
-
-class Instruction
-{
-public: 
-	/*Instruction(){}
-	Instruction(InstructionType _type)
-	{
-		type = _type;
-	}*/
-	virtual ~Instruction(){}
-		
-	virtual bool execute()=0;
-	virtual InstructionType getType() {return type;};
-	virtual void setType(InstructionType _type) { type= _type;};
-
-protected:
-	InstructionType type;
-};
 
 class SyntaxAnalyzer
 {
@@ -79,10 +51,10 @@ private:
 	bool FunStatement();
 
 	//bool Assigment();
-	bool Expression();
-	bool SimpleExpression();
-	bool AndExpression();
-	bool OrExpression();
+	ExpressionTreeNode* Expression();
+	ExpressionTreeNode* SimpleExpression();
+	ExpressionTreeNode* AndExpression();
+	ExpressionTreeNode* OrExpression();
 	SymbolType RelOp();
 	SymbolType AndOp();
 	SymbolType OrOp();

@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
 	SourceReader sr;
-	sr.openSource("dane.txt");
+	sr.openSource("dane3.txt");
 	LexicalAnalyzer* la = new LexicalAnalyzer(&sr);
 	Symbol s(AndSym, "a",1,1);
 	/*while(s.getSymbolType()!=EOFSym)
