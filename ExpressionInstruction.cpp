@@ -16,10 +16,37 @@ ExpressionInstruction::~ExpressionInstruction(void)
 	delete result;
 }
 
+void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
+{
+	if(node->getChildrenCount() == 0)
+	{
+		switch(node->getType())
+		{
+		case variableNodeType:
+			//delete node->getVariable();
+			break;
+		case funNodeType:
+			delete node->getFunInstruction();
+			break;
+		case valueNodeType:
+			delete node->getValue();
+			break;
+		}
+		return;
+	}
+
+	for(int i=0; node->getChildrenCount()<i; i++)
+	{
+		clearTree(node->getChildAt(i));
+		delete node->getChildAt(i);
+	}
+}
 bool ExpressionInstruction::execute()
 {
 	cout << "expression" <<endl;
 	result = calcTreeValue(root);
+	//clearTree(root);
+	delete root;
 	if(result)
 	{
 		cout<<result->toString()<<endl;
@@ -38,11 +65,13 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 		if(var == NULL)										//variable not found
 		{
 			cout<<"Line "<<line<<": Undeclared variable '"<<varName<<"' used in expression"<<endl;
+			root->setType(errorNodeType);
 			return NULL;
 		}
 		if(var->getValue().getType() == UnknownType)		//variable not defined
 		{
 			cout<<"Line "<<line<<": Undefined variable '"<<varName<<"' used in expression"<<endl;
+			root->setType(errorNodeType);
 			return NULL;
 		}
 		
@@ -66,12 +95,15 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			return NULL;
 
 		Value* val = calcTreeValue(root->getChildAt(0));
-		//delete root->getChildAt(0);
 
-		if(val == NULL)
+		if(root->getChildAt(0)->getType() == errorNodeType)
+		{
+			root->setType(errorNodeType);
 			return NULL;
+		}
 		if(val->getType() != BoolType)						//not bool
 		{
+			root->setType(errorNodeType);
 			cout<< "Line "<<line<<": Negating non-bool expression"<<endl;
 			return NULL;
 		}
@@ -92,32 +124,37 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 
 	if(root->getType() == unknowndNodeType)					//unknown type
 	{
-		//Value *valReturned = new Value();
-		if(root->getChildrenCount() == 0)					//0 children
-			return NULL;
-		
 		Value* valLeft = calcTreeValue(root->getChildAt(0));	//left value
-		//delete root->getChildAt(0);
 
-		if(valLeft == NULL)
+		if(root->getChildrenCount() == 0)					//0 children
 		{
-			//delete root->getChildAt(0);
+			root->setType(errorNodeType);
+			return NULL;
+		}	
+		
+		if(valLeft->getType() == errorNodeType)
+		{
+			root->setType(errorNodeType);
 			return NULL;
 		}
-
-		//valReturned->setType(valLeft->getType());				//setting val type
 
 		for(int i=1; i<root->getChildrenCount(); i+=2)
 		{
 			SymbolType s = root->getChildAt(i)->getOperator();		//operator
+			
 			Value *valRight = calcTreeValue(root->getChildAt(i+1));	//right value
 
+			if(root->getChildAt(i+1)->getType() == errorNodeType)
+			{
+				root->setType(errorNodeType);
+				return NULL;
+			}
+
+			
+
+			/**********fract operations*********************************************/
 			if(s >= PlusSym && s <= LessEqSym)						//if fract operator
 			{
-				//if(s >= PlusSym && s<=DivideSym)					//setting return type
-				//	valReturned->setType(FractType);
-				//else
-				//	valReturned->setType(BoolType);
 
 				if(valLeft->getType() != FractType || valRight->getType() != FractType)			//type mismatch
 				{
@@ -187,7 +224,32 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 					}
 				}//switch
 			}//if fract operator
-			
+
+
+			/***********bool relation operation**************************************/
+			if(s >= OrSym && s<= AndSym)
+			{
+				if(valLeft->getType() != BoolType || valRight->getType() != BoolType)			//type mismatch
+				{
+					cout << "Line "<<line<<": Type mismatch in expression (expected bool, got fract)"<<endl;
+					return NULL;
+				}
+
+				switch(s)
+				{
+					case OrSym:
+					{
+						valLeft->setValue(valLeft->getBool() || valRight->getBool());
+						break;
+					}
+
+					case AndSym:
+					{
+						valLeft->setValue(valLeft->getBool() && valRight->getBool());
+						break;
+					}
+				}
+			}
 		}//for
 		//valReturned->setValue(valLeft->getValue());
 		return valLeft;

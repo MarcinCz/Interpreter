@@ -78,8 +78,6 @@ public:
 	void addChild(ExpressionTreeNode* _child) { children.push_back(_child); }
 	
 
-	
-
 private:
 	ExpressionTreeNode* parent;
 	vector<ExpressionTreeNode*> children;
@@ -107,6 +105,7 @@ public:
 	Value* getResult();
 
 private:
+	void clearTree(ExpressionTreeNode* node);
 	Value* calcTreeValue(ExpressionTreeNode* node);
 	ExpressionTreeNode* root;
 	Value* result;
