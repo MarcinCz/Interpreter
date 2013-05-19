@@ -41,6 +41,7 @@ public:
 	SyntaxAnalyzer(LexicalAnalyzer* lexAnalyzer);
 	~SyntaxAnalyzer(void);
 
+	vector<Instruction*> getInstructionList();
 	bool Program();
 private:
 
@@ -58,14 +59,6 @@ private:
 	SymbolType RelOp();
 	SymbolType AndOp();
 	SymbolType OrOp();
-
-	/*ExpressionTreeNode* Expression();
-	ExpressionTreeNode* SimpleExpression();
-	ExpressionTreeNode* AndExpression();
-	ExpressionTreeNode* OrExpression();
-	SymbolType RelOp();
-	SymbolType AndOp();
-	SymbolType OrOp();*/
 
 	bool Params();
 	bool Block();

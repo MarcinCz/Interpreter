@@ -1,7 +1,14 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+#include "Variable.h"
+//#include "Interpreter.h"
+
 using namespace std;
+
+
+class Interpreter;
 
 enum InstructionType
 {
@@ -14,6 +21,8 @@ enum InstructionType
 	PrintInstr,
 	WhileInstr,
 };
+
+
 
 class Instruction
 {
@@ -28,7 +37,9 @@ public:
 	virtual bool execute()=0;
 	virtual InstructionType getType() {return type;};
 	virtual void setType(InstructionType _type) { type= _type;};
+	virtual void setInterpreter(Interpreter* _interpr) {interpr = _interpr;};
 
 protected:
 	InstructionType type;
+	Interpreter* interpr;
 };

@@ -3,10 +3,14 @@
 
 Interpreter::Interpreter(void)
 {
+	stackLevel = 0;
+	variableStack.push_back(vector<Variable *>());
 }
 
 Interpreter::Interpreter(vector<Instruction* > _instructionList)
 {
+	stackLevel = 0;
+	variableStack.push_back(vector<Variable *>());
 	instructionList = _instructionList;
 }
 Interpreter::~Interpreter(void)
@@ -33,7 +37,7 @@ bool Interpreter::addVariable(string _varName)
 	{
 		if(var->getLevel() == stackLevel)
 		{
-			cout<<"Variable "<<_varName<<" already declared on that level."<<endl;
+			//cout<<"Variable "<<_varName<<" already declared on that level."<<endl;
 			return false;
 		}
 	}
@@ -62,7 +66,7 @@ bool Interpreter::addFunction(string _name, int _parameters)
 {
 	if(getFunction(_name, _parameters) != NULL)
 	{
-		cout<<"Function with that name and parameters number already declared"<<endl;
+		//cout<<"Function with that name and parameters number already declared"<<endl;
 		return false;
 	}
 
@@ -70,6 +74,21 @@ bool Interpreter::addFunction(string _name, int _parameters)
 	return true;
 }
 
+bool Interpreter::executeInstructions()
+{
+	for(size_t i=0; i<instructionList.size(); i++)
+	{
+		instructionList.at(i)->setInterpreter(this);
+		if(!instructionList.at(i)->execute())
+		{
+			cout << "Interpretation ended with error"<<endl;
+			return false;
+		}
+	}
+
+	cout << "Interpretation ended without errors"<<endl;
+	return true;
+}
 void Interpreter::increaseStackLevel()
 {
 	variableStack.push_back(vector<Variable *>());

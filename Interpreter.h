@@ -1,6 +1,7 @@
 #pragma once
 
-#include "SyntaxAnalyzer.h"
+#include "Variable.h"
+#include <vector>
 #include "AssigmentInstruction.h"
 #include "DeclarationInstruction.h"
 #include "ExpressionInstruction.h"
@@ -10,6 +11,16 @@
 #include "PrintInstruction.h"
 #include "WhileInstruction.h"
 
+//class AssigmentInstruction;
+//class DeclarationInstruction;
+//class ExpressionInstruction;
+//class FunDeclarationInstruction;
+//class FunInstruction;
+//class IfInstruction;
+//class PrintInstruction;
+//class WhileInstruction;
+//class Function;
+//class Instruction;
 
 class Interpreter
 {
@@ -25,6 +36,7 @@ public:
 	Function* getFunction(string name, int parameters); //null if not declared
 	bool addFunction(string name, int parameters);
 
+	bool executeInstructions();
 	void increaseStackLevel();
 	void decreaseStackLevel();
 	void setInstructionList(vector<Instruction* > instructionList);

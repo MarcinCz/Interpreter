@@ -36,8 +36,8 @@ public:
 	string getValue() { return value; }
 	void setType(VarType _type) { type =_type; }
 	void setValue(string _value) { value =_value; } 
-	//void setValue(Fraction _fractVal) { fractVal = _fractVal; }
-	//void setValue(bool _boolVal) { boolVal = _boolVal; }
+	void setValue(Fraction* _fractVal) { fractVal = _fractVal; }
+	void setValue(bool _boolVal) { boolVal = _boolVal; }
 	
 	Fraction *getFraction() { return fractVal; }
 	bool getBool() { return boolVal; }

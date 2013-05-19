@@ -12,6 +12,7 @@ enum ExpressionTreeNodeType
 	funNodeType,
 	operatorNodeType,
 	unknowndNodeType,
+	errorNodeType,
 };
 
 /**************ExpressionTreeNode************************/
@@ -95,8 +96,11 @@ public:
 
 	bool execute();
 	ExpressionTreeNode* getRoot();
+	Value* getResult();
 
 private:
+	Value* calcTreeValue(ExpressionTreeNode* node);
 	ExpressionTreeNode* root;
+	Value* result;
 };
 

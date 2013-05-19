@@ -33,6 +33,10 @@ void SyntaxAnalyzer::errorInfo(string _info)
 	cout<< "Expected "<<_info<<" at line:"<<currentSymbol.getPosition().second<<", column:"<<currentSymbol.getPosition().first<<endl;
 }
 
+vector<Instruction*> SyntaxAnalyzer::getInstructionList()
+{
+	return InstructionList;
+}
 bool SyntaxAnalyzer::Program()
 {
 	advance();
@@ -253,7 +257,6 @@ bool SyntaxAnalyzer::FunStatement()
 ExpressionTreeNode* SyntaxAnalyzer::Expression()  //TODO:zwraca
 {
 	SymbolType s;
-	ExpressionInstruction w;
 	ExpressionTreeNode* node;
 	ExpressionTreeNode* returnNode;
 
@@ -327,13 +330,20 @@ ExpressionTreeNode* SyntaxAnalyzer::SimpleExpression()
 				else
 				{
 					delete node;
+					for(int i=0; i<returnNode->getChildrenCount(); i++)
+					{
+						delete returnNode->getChildAt(i);
+					}
 					return false;
 				}
 			}
 			else
 			{
-				if(i = 0)
-					return node;
+				if(i == 0)
+				{
+					delete returnNode;
+					return node;		//parent set to deleted object for a moment
+				}
 				else
 					return returnNode;
 			}
@@ -371,18 +381,24 @@ ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 				{
 					node->setParent(returnNode);
 					returnNode->addChild(node);
-					//return returnNode;
 				}
 				else
 				{
 					delete node;
+					for(int i=0; i<returnNode->getChildrenCount(); i++)
+					{
+						delete returnNode->getChildAt(i);
+					}
 					return false;
 				}
 			}
 			else
 			{
-				if(i = 0)
-					return node;
+				if(i == 0)
+				{
+					delete returnNode;
+					return node;		//parent set to deleted object for a moment
+				}
 				else
 					return returnNode;
 			}
@@ -396,7 +412,6 @@ ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 {
 	Instruction* i;
-	SymbolType s;
 	Fraction* f;
 	ExpressionTreeNode* node;
 	ExpressionTreeNode* returnNode;
@@ -778,7 +793,8 @@ Instruction* SyntaxAnalyzer::InstructionS()
 				if(currentSymbol.getSymbolType() == SemicolonSym)
 				{
 					advance();
-					AssigmentInstruction* a = new AssigmentInstruction();
+					ExpressionInstruction* e = new ExpressionInstruction(node);
+					AssigmentInstruction* a = new AssigmentInstruction(var, e);
 					//a.execute();
 					return a;
 				}

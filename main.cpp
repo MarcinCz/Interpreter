@@ -20,8 +20,13 @@ int main(int argc, char *argv[])
 	}*/
 	
 	SyntaxAnalyzer sa(la);
-	sa.Program();
+	if(sa.Program())
+	{
+		Interpreter in(sa.getInstructionList());
+		in.executeInstructions();
+	}
 
+	
 	//Instruction i(IfInstr);
 	//AssigmentInstruction a;
 	//a.setType(AssigmentInst);
