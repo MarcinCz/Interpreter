@@ -20,6 +20,7 @@ enum ExpressionTreeNodeType
 class ExpressionTreeNode
 {
 public:
+	//Constructors
 	ExpressionTreeNode() { type = unknowndNodeType; }
 	ExpressionTreeNode(Variable* _nodeVariable)
 	{
@@ -43,12 +44,21 @@ public:
 	}
 	~ExpressionTreeNode(){}
 
-	int getChildrenCount(){ return children.size(); }
-	Variable* getVariable() { return nodeVariable; }
-	SymbolType getOperator() { return nodeOperator; }
-	Value* getValue() { return nodeValue; }
-	Instruction* getFunInstruction() { return nodeFunInstruction; }
+	//Getters
+	int						getChildrenCount(){ return children.size(); }
+	Variable*				getVariable() { return nodeVariable; }
+	SymbolType				getOperator() { return nodeOperator; }
+	Value*					getValue() { return nodeValue; }
+	Instruction*			getFunInstruction() { return nodeFunInstruction; }
+	ExpressionTreeNode*		getParent() { return parent; }
+	ExpressionTreeNode*		getChildAt(int pos) {return children.at(pos); }
+	ExpressionTreeNodeType	getType() { return type; }
 
+	//Setters
+	void setType(ExpressionTreeNodeType _type)
+	{
+		type = _type;
+	}
 	void setVariable(Variable* _nodeVariable)
 	{
 		type = variableNodeType;
@@ -64,13 +74,11 @@ public:
 		type = operatorNodeType;
 		nodeOperator = _nodeOperator;
 	}
-	
-	ExpressionTreeNode* getParent() { return parent; }
-	ExpressionTreeNode* getChildAt(int pos) {return children.at(pos); }
-	ExpressionTreeNodeType getType() { return type; }
-
 	void setParent(ExpressionTreeNode* _parent) { parent = _parent; }
 	void addChild(ExpressionTreeNode* _child) { children.push_back(_child); }
+	
+
+	
 
 private:
 	ExpressionTreeNode* parent;

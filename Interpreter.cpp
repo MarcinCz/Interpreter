@@ -21,6 +21,7 @@ Variable* Interpreter::getVariable(string _varName)
 {
 	for(int i = stackLevel; i>=0; i--)				//loop on every stack level from the highest
 	{
+		
 		for(size_t j = 0; j < variableStack.at(i).size(); j++)	//checks one level
 		{			
 			if(variableStack.at(i).at(j)->getName() == _varName)

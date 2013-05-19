@@ -26,7 +26,19 @@ int main(int argc, char *argv[])
 		in.executeInstructions();
 	}
 
-	
+	/*Fraction f1("1");
+	Fraction f2("3");
+	Fraction f3("4");
+	f1=f3-f2-f1;
+	cout<<f1.toString()<<endl;*/
+
+
+	/*Fraction* f=new Fraction("1.1/2");
+	Value* valReturned = new Value(f);
+	valReturned->setValue(&(*(valReturned->getFraction()) + *(valReturned->getFraction()))); 
+	cout <<valReturned->toString()<<endl;*/
+
+
 	//Instruction i(IfInstr);
 	//AssigmentInstruction a;
 	//a.setType(AssigmentInst);

@@ -7,6 +7,7 @@
 #include "IfInstruction.h"
 #include "PrintInstruction.h"
 #include "WhileInstruction.h"
+#include "Interpreter.h" //TODO: usunac
 
 #include <sstream>
 
@@ -780,6 +781,7 @@ Instruction* SyntaxAnalyzer::InstructionS()
 		{
 			advance();
 			DeclarationInstruction* d = new DeclarationInstruction(var);
+			d->setLine(lexAnalyzer->getColumn());
 			//InstructionList.pu
 			
 			return d;
@@ -794,6 +796,11 @@ Instruction* SyntaxAnalyzer::InstructionS()
 				{
 					advance();
 					ExpressionInstruction* e = new ExpressionInstruction(node);
+					//Interpreter* i=new Interpreter();
+					//e->setInterpreter(i);
+					//e->execute();
+					e->setLine(lexAnalyzer->getRow());
+					InstructionList.push_back(e); //TODO: usunac
 					AssigmentInstruction* a = new AssigmentInstruction(var, e);
 					//a.execute();
 					return a;

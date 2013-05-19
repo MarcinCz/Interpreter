@@ -36,14 +36,27 @@ public:
 	string getValue() { return value; }
 	void setType(VarType _type) { type =_type; }
 	void setValue(string _value) { value =_value; } 
-	void setValue(Fraction* _fractVal) { fractVal = _fractVal; }
-	void setValue(bool _boolVal) { boolVal = _boolVal; }
+	void setValue(Fraction* _fractVal) { fractVal = _fractVal; type = FractType; }
+	void setValue(bool _boolVal) { boolVal = _boolVal; type = BoolType; }
 	
 	Fraction *getFraction() { return fractVal; }
 	bool getBool() { return boolVal; }
 	Fraction toFraction() { return Fraction(value); }
 	bool toBool() { return (value == "true"); }  //TODO: moze zamiana fract<->bool
-
+	string toString() 
+	{
+		if(type == BoolType)
+		{
+			if(boolVal)
+				return "true";
+			else
+				return "false";
+		}
+		else
+		{
+			return fractVal->toString();
+		}
+	}
 
 private:
 	VarType type;

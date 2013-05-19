@@ -4,11 +4,19 @@
 Fraction::Fraction(void)
 {
 	integer = 0;
-	numerator = 1;
+	numerator = 0;
 	denominator = 1;
 	sign = true;
 }
 
+Fraction::Fraction(const Fraction &f)
+{
+	sign = f.sign;
+	integer = f.integer;
+	denominator = f.denominator;
+	numerator = f.numerator;
+
+}
 Fraction::Fraction(int _integer, int _numerator, int _denominator, bool _sign)
 {
 	integer = _integer;
@@ -56,8 +64,7 @@ Fraction::~Fraction(void)
 
 void Fraction::normalize()
 {
-	if(numerator == 0)
-		denominator =0;
+	
 
 	if(denominator != 0)
 	{
@@ -72,6 +79,10 @@ void Fraction::normalize()
 			numerator -= newInt * denominator;
 		}
 	}
+
+	if(numerator == 0)
+		denominator = 1;
+
 	if(isZero())
 	{
 		sign = true;
@@ -80,6 +91,9 @@ void Fraction::normalize()
 
 int Fraction::NWD(int a, int b)
 {
+	if(a==0 || b==0)
+		return 1;
+
 	while (a!=b) 
 	{
 		if (a>b)
@@ -189,9 +203,9 @@ bool Fraction::operator <=(const Fraction &f) const
 	return *this == f || *this < f;
 }
 
-Fraction& Fraction::operator +(const Fraction &f)
+Fraction Fraction::operator +(const Fraction &f)
 {
-	static Fraction returned;
+	Fraction returned;
 	Fraction f1 = *this;
 	Fraction f2 = f;
 	int nww = NWW(f1.denominator, f2.denominator);
@@ -259,9 +273,9 @@ Fraction& Fraction::operator +(const Fraction &f)
 
 }
 
-Fraction& Fraction::operator -(const Fraction &f)// const
+Fraction Fraction::operator -(const Fraction &f)// const
 {
-	static Fraction returned;
+	Fraction returned;
 
 	Fraction fm = f;
 	fm.sign = !f.sign;
@@ -270,10 +284,13 @@ Fraction& Fraction::operator -(const Fraction &f)// const
 	return returned;
 }
 
-Fraction& Fraction::operator *(const Fraction &f)
+Fraction Fraction::operator *(const Fraction &f)
 {
-	static Fraction returned;
+	Fraction returned;
 	
+	returned.integer = 0;
+
+
 	returned.numerator = (integer * denominator + numerator) * (f.integer * f.denominator + f.numerator);
 	returned.denominator = denominator * f.denominator;
 	returned.normalize();
@@ -283,9 +300,9 @@ Fraction& Fraction::operator *(const Fraction &f)
 
 }
 
-Fraction& Fraction::operator /(const Fraction &f)
+Fraction Fraction::operator /(const Fraction &f)
 {
-	static Fraction returned;
+	Fraction returned;
 	Fraction f1 = *this;
 	Fraction f2 = f;
 
@@ -294,6 +311,7 @@ Fraction& Fraction::operator /(const Fraction &f)
 		//TODO: dzielenie przez zero
 		return returned;
 	}
+	returned.integer = 0;
 	returned.numerator = (f1.integer * f1.denominator + f1.numerator) * f2.denominator;
 	returned.denominator = (f2.integer * f2.denominator + f2.numerator) * f1.denominator;
 	returned.normalize();

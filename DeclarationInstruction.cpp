@@ -22,7 +22,7 @@ bool DeclarationInstruction::execute()
 
 	if(!interpr->addVariable(varName))	
 	{
-		cout<<"Variable "<<varName<<" already declared on that level."<<endl;
+		cout<<"Line "<<line<<": Variable '"<<varName<<"' already declared on that level."<<endl;
 		return false;
 	}
 	return true;

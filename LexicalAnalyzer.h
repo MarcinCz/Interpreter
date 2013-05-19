@@ -21,12 +21,12 @@ enum SymbolType
 	PrintSym,		// print				10
 
 	//operators
-	PlusSym,		// +					11
-	MinusSym,		// -					12
-	OrSym,			// or					13
-	MultiSym,		// *					14
-	DivideSym,		// /					15
-	AndSym,			// and					16
+	OrSym,			// or					11
+	AndSym,			// and					12
+	PlusSym,		// +					13
+	MinusSym,		// -					14
+	MultiSym,		// *					15
+	DivideSym,		// /					16
 	GreaterSym,		// >					17
 	LessSym,		// <					18
 	EqualSym,		// ==					19

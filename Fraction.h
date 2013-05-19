@@ -7,6 +7,7 @@ class Fraction
 {
 public:
 	Fraction(void);
+	Fraction(const Fraction &f);
 	Fraction(string value);
 	Fraction(int integer, int numerator = 0, int denumeration = 1, bool sign = true);
 	~Fraction(void);
@@ -14,10 +15,10 @@ public:
 	bool isZero();
 	string toString();
 
-	Fraction& operator+(const Fraction& f);
-	Fraction& operator-(const Fraction& f);
-	Fraction& operator*(const Fraction& f);
-	Fraction& operator/(const Fraction& f);
+	Fraction operator+(const Fraction& f);
+	Fraction operator-(const Fraction& f);
+	Fraction operator*(const Fraction& f);
+	Fraction operator/(const Fraction& f);
 	
 	/*Fraction& operator+=(const Fraction& f);
 	Fraction& operator-=(const Fraction& f);
