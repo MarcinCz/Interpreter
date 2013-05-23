@@ -11,6 +11,11 @@ enum VarType{
 class Value{
 public:
 	Value() {}
+	Value(const Value *f)
+	{
+		type = f->type;
+		value = f->value;
+	}
 	Value(VarType _type, string _value)
 	{
 		type = _type;
@@ -19,31 +24,38 @@ public:
 	Value(bool _boolVal)
 	{
 		type = BoolType;
-		boolVal = _boolVal;
+		if(_boolVal) value = "true";
+		else value = "false";
+		type = BoolType;
 	}
 	Value(Fraction* _fractVal)
 	{
 		type = FractType;
-		fractVal = _fractVal;
+		value = _fractVal->toString();
 	}
-	~Value(){ if(type = FractType) delete fractVal;}
+	~Value(){ /*if(type = FractType) delete fractVal;*/}
 
 	bool isFraction() { return type == FractType; }
 	bool isBool() { return type == BoolType; }
 	bool isUnknown() { return type == UnknownType; }
 
 	VarType getType() { return type; }
-	string getValue() { return value; }
+	string toString() { return value; }
 	void setType(VarType _type) { type =_type; }
 	void setValue(string _value) { value =_value; } 
-	void setValue(Fraction* _fractVal) { fractVal = _fractVal; type = FractType; }
-	void setValue(bool _boolVal) { boolVal = _boolVal; type = BoolType; }
+	void setValue(Fraction _fractVal) { value = _fractVal.toString(); type = FractType; }
+	void setValue(bool _boolVal) 
+	{ 
+		if(_boolVal) value = "true";
+		else value = "false";
+		type = BoolType; 
+	}
 	
-	Fraction *getFraction() { return fractVal; }
-	bool getBool() { return boolVal; }
+	//Fraction *getFraction() { return fractVal; }
+	//bool getBool() { return boolVal; }
 	Fraction toFraction() { return Fraction(value); }
 	bool toBool() { return (value == "true"); }  //TODO: moze zamiana fract<->bool
-	string toString() 
+	/*string toString() 
 	{
 		if(type == BoolType)
 		{
@@ -56,13 +68,13 @@ public:
 		{
 			return fractVal->toString();
 		}
-	}
+	}*/
 
 private:
 	VarType type;
 	string value;
-	Fraction* fractVal;
-	bool boolVal;
+	//Fraction* fractVal;
+	//bool boolVal;
 	
 };
 
@@ -71,21 +83,21 @@ class Variable
 {
 public:
 	Variable(void) {}
-	Variable(string _name){ name = _name; value = Value(UnknownType, ""); }
+	Variable(string _name){ name = _name; value = &Value(UnknownType, ""); }
 	~Variable(void) {}
 
-	Value getValue() { return value; }
+	Value* getValue() { return value; }
 	string getName() { return name; }
 	int getLevel() {return level;}
 
-	void setValue(Value _value) { value = _value; }
+	void setValue(Value* _value) { value = _value; }
 	void setName(string _name) { name = _name; }
 	void setLevel(int _level) {level = _level;}
 		
 
 private:
 	string name;
-	Value value;
+	Value* value;
 	int level;			//variable stack level
 };
 

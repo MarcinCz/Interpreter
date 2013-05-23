@@ -796,13 +796,8 @@ Instruction* SyntaxAnalyzer::InstructionS()
 				{
 					advance();
 					ExpressionInstruction* e = new ExpressionInstruction(node);
-					//Interpreter* i=new Interpreter();
-					//e->setInterpreter(i);
-					//e->execute();
 					e->setLine(lexAnalyzer->getRow());
-					InstructionList.push_back(e); //TODO: usunac
 					AssigmentInstruction* a = new AssigmentInstruction(var, e);
-					//a.execute();
 					return a;
 				}
 				else
@@ -860,6 +855,7 @@ Instruction* SyntaxAnalyzer::FunCall()
 Instruction* SyntaxAnalyzer::PrintCall()
 {
 	PrintInstruction* p;
+	ExpressionTreeNode* node;
 	string text;
 	bool isText;
 
@@ -869,11 +865,11 @@ Instruction* SyntaxAnalyzer::PrintCall()
 		if(currentSymbol.getSymbolType() == LBracketSym)					//(
 		{
 			advance();
-			if(currentSymbol.getSymbolType() == IdentSym)					//id												//id
+			node = Expression();
+			if(node != NULL)												//expr												
 			{
-				text = currentSymbol.getValue();
+				//text = currentSymbol.getValue();
 				isText = 0;
-				advance();
 			}
 			else if(currentSymbol.getSymbolType() == TextSym)				//text
 			{
@@ -888,7 +884,13 @@ Instruction* SyntaxAnalyzer::PrintCall()
 				if(currentSymbol.getSymbolType() == SemicolonSym)			//;
 				{
 					advance();
-					p = new PrintInstruction(text, isText);		//TODO: zmienic konstruktor
+					if(isText)
+						p = new PrintInstruction(text);		//TODO: zmienic konstruktor
+					else
+					{
+						ExpressionInstruction* e = new ExpressionInstruction(node);
+						p = new PrintInstruction(e);
+					}
 					return p;
 				}
 				else

@@ -17,7 +17,7 @@ bool DeclarationInstruction::execute()
 {
 	//creates unknown variable and pushes it on stack
 	//Variable var(varName);
-	cout<<"Declaration" <<endl;
+	cout<<"----------Declaration" <<endl;
 
 
 	if(!interpr->addVariable(varName))	

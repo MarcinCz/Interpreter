@@ -24,7 +24,7 @@
 	Instruction	= Declaration | Assigment | FunCall,';' | PrintCall |;
 	Declaration	= ident, ';';
 	FunCall		= '^', ident, Params;
-	PrintCall	= 'print', '(', [ident | text], ')';
+	PrintCall	= 'print', '(', [Expression | text], ')';
 ***********/
 
 #include "LexicalAnalyzer.h"

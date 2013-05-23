@@ -13,6 +13,8 @@ ExpressionInstruction::ExpressionInstruction(ExpressionTreeNode* _root)
 
 ExpressionInstruction::~ExpressionInstruction(void)
 {
+	clearTree(root);
+	delete root;
 	delete result;
 }
 
@@ -23,13 +25,13 @@ void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
 		switch(node->getType())
 		{
 		case variableNodeType:
-			//delete node->getVariable();
+			delete node->getVariable();
 			break;
 		case funNodeType:
 			delete node->getFunInstruction();
 			break;
 		case valueNodeType:
-			delete node->getValue();
+			//delete node->getValue();
 			break;
 		}
 		return;
@@ -41,15 +43,15 @@ void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
 		delete node->getChildAt(i);
 	}
 }
+
 bool ExpressionInstruction::execute()
 {
-	cout << "expression" <<endl;
+	cout << "----------Expression" <<endl;
 	result = calcTreeValue(root);
-	//clearTree(root);
-	delete root;
+
 	if(result)
 	{
-		cout<<result->toString()<<endl;
+		cout<<"----------"<<result->toString()<<endl;
 		return true;
 	}
 	else 
@@ -68,14 +70,14 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			root->setType(errorNodeType);
 			return NULL;
 		}
-		if(var->getValue().getType() == UnknownType)		//variable not defined
+		if(var->getValue()->getType() == UnknownType)		//variable not defined
 		{
 			cout<<"Line "<<line<<": Undefined variable '"<<varName<<"' used in expression"<<endl;
 			root->setType(errorNodeType);
 			return NULL;
 		}
 		
-		return &(var->getValue());
+		return var->getValue();
 		
 	}
 
@@ -108,7 +110,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			return NULL;
 		}
 
-		if(val->getBool())									//true->false
+		if(val->toBool())									//true->false
 		{
 			val->setValue(false);
 			
@@ -166,60 +168,52 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 				{
 					case PlusSym:
 					{
-						Fraction* oldVal=valLeft->getFraction();
-						valLeft->setValue(new Fraction(*(valLeft->getFraction()) + *(valRight->getFraction()))); 
-						delete oldVal;
+						valLeft->setValue((valLeft->toFraction()) + (valRight->toFraction())); 
 						break;
 					}
 					case MinusSym:
 					{
-						Fraction* oldVal=valLeft->getFraction();
-						valLeft->setValue(new Fraction(*(valLeft->getFraction()) - *(valRight->getFraction())));
-						delete oldVal;
+						valLeft->setValue((valLeft->toFraction()) - (valRight->toFraction()));
 						break;
 					}
 					case MultiSym:
 					{
-						Fraction* oldVal=valLeft->getFraction();
-						valLeft->setValue(new Fraction(*(valLeft->getFraction()) * *(valRight->getFraction())));
-						delete oldVal;
+						valLeft->setValue((valLeft->toFraction()) * (valRight->toFraction()));
 						break;
 					}
 					case DivideSym:
 					{
-						Fraction* oldVal=valLeft->getFraction();
-						valLeft->setValue(new Fraction(*(valLeft->getFraction()) / *(valRight->getFraction())));
-						delete oldVal;
+						valLeft->setValue((valLeft->toFraction()) / (valRight->toFraction()));
 						break;
 					}
 					case GreaterSym:
 					{
-						valLeft->setValue(*(valLeft->getFraction()) > *(valRight->getFraction()));
+						valLeft->setValue((valLeft->toFraction()) > (valRight->toFraction()));
 						break;
 					}
 					case LessSym:
 					{
-						valLeft->setValue(*(valLeft->getFraction()) < *(valRight->getFraction()));
+						valLeft->setValue((valLeft->toFraction()) < (valRight->toFraction()));
 						break;
 					}
 					case EqualSym:
 					{
-						valLeft->setValue(*(valLeft->getFraction()) == *(valRight->getFraction()));
+						valLeft->setValue((valLeft->toFraction()) == (valRight->toFraction()));
 						break;
 					}
 					case NotEqualSym:
 					{
-						valLeft->setValue(*(valLeft->getFraction()) != *(valRight->getFraction()));
+						valLeft->setValue((valLeft->toFraction()) != (valRight->toFraction()));
 						break;
 					}
 					case GreaterEqSym:
 					{
-						valLeft->setValue(*(valLeft->getFraction()) >= *(valRight->getFraction()));
+						valLeft->setValue((valLeft->toFraction()) >= (valRight->toFraction()));
 						break;
 					}
 					case LessEqSym:
 					{
-						valLeft->setValue(*(valLeft->getFraction()) <= *(valRight->getFraction()));
+						valLeft->setValue((valLeft->toFraction()) <= (valRight->toFraction()));
 						break;
 					}
 				}//switch
@@ -239,13 +233,13 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 				{
 					case OrSym:
 					{
-						valLeft->setValue(valLeft->getBool() || valRight->getBool());
+						valLeft->setValue(valLeft->toBool() || valRight->toBool());
 						break;
 					}
 
 					case AndSym:
 					{
-						valLeft->setValue(valLeft->getBool() && valRight->getBool());
+						valLeft->setValue(valLeft->toBool() && valRight->toBool());
 						break;
 					}
 				}

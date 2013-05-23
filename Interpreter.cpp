@@ -85,6 +85,7 @@ bool Interpreter::executeInstructions()
 			cout << "Interpretation ended with error"<<endl;
 			return false;
 		}
+		delete instructionList.at(i);
 	}
 
 	cout << "Interpretation ended without errors"<<endl;
