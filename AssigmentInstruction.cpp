@@ -25,6 +25,15 @@ bool AssigmentInstruction::execute()
 		if(expr->execute())												//calc expression
 		{
 			Value* val =new Value(expr->getResult());
+			if(!var->getValue()->isUnknown() && (var->getValue()->getType() != val->getType()))
+			{
+				if(var->getValue()->isFraction())
+					cout<<"Line "<<line<<": Type mismatch in assigment. Expected fraction."<<endl;
+				else
+					cout<<"Line "<<line<<": Type mismatch in assigment. Expected bool."<<endl;
+				return false;
+			}
+			//delete expr->getResult();
 			var->setValue(val);
 			return true;
 		}
@@ -35,7 +44,7 @@ bool AssigmentInstruction::execute()
 	}
 	else
 	{
-		cout<<"Line "<<line<<": Undeclared variable '"<<varName<<"' used in expression"<<endl;
+		cout<<"Line "<<line<<": Undeclared variable '"<<varName<<"' used in assigment"<<endl;
 		return false;
 	}
 

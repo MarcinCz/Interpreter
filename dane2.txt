@@ -1,44 +1,6 @@
-function @ reverseBool(aaa)
-{
-return !a;
-}
+d;
+c;
+d=1;
+c=1;
 
-a;
-b;
-
-a=(false or 2>1.1/2) and 1!=2.2/3;
-^reverse*Bool(aaaa);
-
-x;
-y;
-x=3;
-y=1;
-
-while(x>0)
-{
-	
-y;
-	y=2.1/2;	
-	if(x==2)
-	{
-		x=x-y;
-		print("X=");
-		print(x);
-	}
-	else
-	{
-		x=x-1;  # asdasdasdasd
-	}
-}
-
-x;
-y; 
-a;
-
-%
-x=1.1/2;
-y=0;
-a=x/y;
-print(x);
-
-a = 1*(^fun()+4)>aa+3;
+d=c-1 and true;

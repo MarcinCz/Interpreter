@@ -38,6 +38,7 @@ bool PrintInstruction::execute()
 			if(expr->execute())												//calc expression
 			{
 				cout << expr->getResult()->toString() <<endl;
+				//delete expr->getResult();
 				return true;
 			}
 			else

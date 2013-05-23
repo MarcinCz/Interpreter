@@ -49,7 +49,7 @@ private:
 	bool Statement();
 	bool WhileStatement();
 	bool IfStatement();
-	bool FunStatement();
+	Instruction* FunStatement();
 
 	//bool Assigment();
 	ExpressionTreeNode* Expression();
@@ -60,11 +60,11 @@ private:
 	SymbolType AndOp();
 	SymbolType OrOp();
 
-	bool Params();
+	pair<bool,vector<string> > Params();
 	bool Block();
-	bool FunBlock();
+	pair<ExpressionInstruction*, vector<Instruction*> > FunBlock();
 	Instruction* InstructionS();
-	Instruction* FunCall();
+	FunInstruction* FunCall();
 	Instruction* PrintCall();
 	Fraction* FractConst();
 

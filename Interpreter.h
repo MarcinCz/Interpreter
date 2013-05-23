@@ -31,10 +31,12 @@ public:
 
 	//bool isVariableDeclared(string varName);
 	Variable* getVariable(string varName);				//null if not declared
+	Variable* getVariableFromLowerStack(string _varName);//null if not declared, used by functionCall
 	bool addVariable(string varName);
+	bool addVariable(Variable* var);
 
 	Function* getFunction(string name, int parameters); //null if not declared
-	bool addFunction(string name, int parameters);
+	bool addFunction(Function* f);
 
 	bool executeInstructions();
 	void increaseStackLevel();

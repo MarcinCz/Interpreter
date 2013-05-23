@@ -15,7 +15,7 @@ ExpressionInstruction::~ExpressionInstruction(void)
 {
 	clearTree(root);
 	delete root;
-	delete result;
+	//delete result;
 }
 
 void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
@@ -25,7 +25,7 @@ void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
 		switch(node->getType())
 		{
 		case variableNodeType:
-			delete node->getVariable();
+			//delete node->getVariable();
 			break;
 		case funNodeType:
 			delete node->getFunInstruction();
@@ -51,6 +51,7 @@ bool ExpressionInstruction::execute()
 
 	if(result)
 	{
+		result = new Value(result);
 		cout<<"----------"<<result->toString()<<endl;
 		return true;
 	}
@@ -88,13 +89,23 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 
 	if(root->getType() == funNodeType)
 	{
+		root->getFunInstruction()->setInterpreter(interpr);
+		if(root->getFunInstruction()->execute())
+		{
+			return root->getFunInstruction()->getResult();
+		}
+		
+		root->setType(errorNodeType);
 		return NULL;										//TODO:fun node
 	}
 
 	if(root->getType() == operatorNodeType)					//! node
 	{
-		if(root->getChildrenCount() == 0)					//0 children
+		if(root->getChildrenCount() == 0)					//0 children, shouldnt happen anyway
+		{
+			root->setType(errorNodeType);
 			return NULL;
+		}
 
 		Value* val = calcTreeValue(root->getChildAt(0));
 
@@ -134,7 +145,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			return NULL;
 		}	
 		
-		if(valLeft->getType() == errorNodeType)
+		if(root->getChildAt(0)->getType() == errorNodeType)
 		{
 			root->setType(errorNodeType);
 			return NULL;
@@ -161,6 +172,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 				if(valLeft->getType() != FractType || valRight->getType() != FractType)			//type mismatch
 				{
 					cout << "Line "<<line<<": Type mismatch in expression (expected fraction, got bool)"<<endl;
+					root->setType(errorNodeType);
 					return NULL;
 				}
 
@@ -226,6 +238,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 				if(valLeft->getType() != BoolType || valRight->getType() != BoolType)			//type mismatch
 				{
 					cout << "Line "<<line<<": Type mismatch in expression (expected bool, got fract)"<<endl;
+					root->setType(errorNodeType);
 					return NULL;
 				}
 
@@ -246,9 +259,10 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			}
 		}//for
 		//valReturned->setValue(valLeft->getValue());
-		return valLeft;
+		return new Value(valLeft);
 	}
 
+	root->setType(errorNodeType);
 	return NULL;
 
 }

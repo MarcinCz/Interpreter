@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Instruction.h"
+#include "FunInstruction.h"
 #include "Variable.h"
 #include <vector>
 
@@ -37,7 +38,7 @@ public:
 		type = valueNodeType;
 		nodeValue = _nodeValue;
 	}
-	ExpressionTreeNode(Instruction* _nodeFunInstruction)
+	ExpressionTreeNode(FunInstruction* _nodeFunInstruction)
 	{
 		type = funNodeType;
 		nodeFunInstruction = _nodeFunInstruction;
@@ -49,7 +50,7 @@ public:
 	Variable*				getVariable() { return nodeVariable; }
 	SymbolType				getOperator() { return nodeOperator; }
 	Value*					getValue() { return nodeValue; }
-	Instruction*			getFunInstruction() { return nodeFunInstruction; }
+	FunInstruction*			getFunInstruction() { return nodeFunInstruction; }
 	ExpressionTreeNode*		getParent() { return parent; }
 	ExpressionTreeNode*		getChildAt(int pos) {return children.at(pos); }
 	ExpressionTreeNodeType	getType() { return type; }
@@ -87,7 +88,7 @@ private:
 	Variable* nodeVariable;
 	Value* nodeValue;
 	SymbolType nodeOperator;
-	Instruction* nodeFunInstruction;
+	FunInstruction* nodeFunInstruction;
 };
 
 

@@ -14,24 +14,24 @@ public:
 	Value(const Value *f)
 	{
 		type = f->type;
-		value = f->value;
+		valueString = f->valueString;
 	}
 	Value(VarType _type, string _value)
 	{
 		type = _type;
-		value = _value;
+		valueString = _value;
 	}
 	Value(bool _boolVal)
 	{
 		type = BoolType;
-		if(_boolVal) value = "true";
-		else value = "false";
+		if(_boolVal) valueString = "true";
+		else valueString = "false";
 		type = BoolType;
 	}
 	Value(Fraction* _fractVal)
 	{
 		type = FractType;
-		value = _fractVal->toString();
+		valueString = _fractVal->toString();
 	}
 	~Value(){ /*if(type = FractType) delete fractVal;*/}
 
@@ -40,21 +40,21 @@ public:
 	bool isUnknown() { return type == UnknownType; }
 
 	VarType getType() { return type; }
-	string toString() { return value; }
+	string toString() { return valueString; }
 	void setType(VarType _type) { type =_type; }
-	void setValue(string _value) { value =_value; } 
-	void setValue(Fraction _fractVal) { value = _fractVal.toString(); type = FractType; }
+	void setValue(string _value) { valueString =_value; } 
+	void setValue(Fraction _fractVal) { valueString = _fractVal.toString(); type = FractType; }
 	void setValue(bool _boolVal) 
 	{ 
-		if(_boolVal) value = "true";
-		else value = "false";
+		if(_boolVal) valueString = "true";
+		else valueString = "false";
 		type = BoolType; 
 	}
 	
 	//Fraction *getFraction() { return fractVal; }
 	//bool getBool() { return boolVal; }
-	Fraction toFraction() { return Fraction(value); }
-	bool toBool() { return (value == "true"); }  //TODO: moze zamiana fract<->bool
+	Fraction toFraction() { return Fraction(valueString); }
+	bool toBool() { return (valueString == "true"); }  //TODO: moze zamiana fract<->bool
 	/*string toString() 
 	{
 		if(type == BoolType)
@@ -72,7 +72,7 @@ public:
 
 private:
 	VarType type;
-	string value;
+	string valueString;
 	//Fraction* fractVal;
 	//bool boolVal;
 	
@@ -83,8 +83,11 @@ class Variable
 {
 public:
 	Variable(void) {}
-	Variable(string _name){ name = _name; value = &Value(UnknownType, ""); }
-	~Variable(void) {}
+	Variable(string _name){ name = _name; value = new Value(UnknownType, ""); }
+	Variable(string _name, Value* _val){name = _name; value = _val;}
+	~Variable(void) { 
+		delete value;
+	}
 
 	Value* getValue() { return value; }
 	string getName() { return name; }

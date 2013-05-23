@@ -72,7 +72,7 @@ bool SyntaxAnalyzer::ProgramLine()
 		}
 	}
 	
-	//errorInfo("statement or instruction");   //TODO: zle pokazuje kolumne
+	errorInfo("statement or instruction");   
 	return false;
 
 
@@ -80,16 +80,19 @@ bool SyntaxAnalyzer::ProgramLine()
 
 bool SyntaxAnalyzer::Statement()
 {
+	Instruction* i;
 	if(WhileStatement())
 	{
 		return true;
 	}
-	else if(IfStatement())
+	if(IfStatement())
 	{
 		return true;
 	}
-	else if(FunStatement())
+	i = FunStatement();
+	if(i != NULL)
 	{
+		InstructionList.push_back(i);
 		return true;
 	}
 	else
@@ -186,21 +189,31 @@ bool SyntaxAnalyzer::IfStatement()
 	else return false;
 }
 
-bool SyntaxAnalyzer::FunStatement()
+Instruction* SyntaxAnalyzer::FunStatement()
 {
-	FunDeclarationInstruction w;
+
+	FunDeclarationInstruction* f;
+	pair<bool,vector<string> > paramsReturn;
+	pair<ExpressionInstruction*,vector<Instruction*> > funBlockReturn;
+	string id;
+
 	if(currentSymbol.getSymbolType() == FunctionSym)				//function
 	{
 		advance();
 		if(currentSymbol.getSymbolType() == IdentSym)				//ident
 		{
+			id = currentSymbol.getValue();
 			advance();
-			if(Params())											//params
-			{				
-				if(FunBlock())										//funblock
+			paramsReturn = Params();
+			if(paramsReturn.first)									//params
+			{			
+				funBlockReturn = FunBlock();
+				if(funBlockReturn.first != NULL)					//funblock
 				{
-					w.execute();
-					return true;				
+					//f.execute();
+					f = new FunDeclarationInstruction(id, paramsReturn.second, funBlockReturn.second, funBlockReturn.first);
+					f->setLine(lexAnalyzer->getRow());
+					return f;				
 				}
 				else
 				{
@@ -412,7 +425,7 @@ ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 
 ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 {
-	Instruction* i;
+	FunInstruction* i;
 	Fraction* f;
 	ExpressionTreeNode* node;
 	ExpressionTreeNode* returnNode;
@@ -573,18 +586,20 @@ SymbolType SyntaxAnalyzer::OrOp()
 	return NullSym;
 }
 
-bool SyntaxAnalyzer::Params()
+pair<bool, vector<string> > SyntaxAnalyzer::Params()
 {
+	vector<string> params;
 	if(currentSymbol.getSymbolType() == LBracketSym)							//(
 	{
 		advance();
 		if(currentSymbol.getSymbolType() == RBracketSym)						//)
 		{
 			advance();
-			return true;
+			return make_pair(true,params);
 		}
 		else if(currentSymbol.getSymbolType() == IdentSym)						//id
 		{
+			params.push_back(currentSymbol.getValue());
 			advance();
 			for(;;)																
 			{
@@ -598,7 +613,7 @@ bool SyntaxAnalyzer::Params()
 					else
 					{
 						errorInfo("id");
-						return false;
+						return make_pair(false,params);
 					}
 				}
 				else
@@ -608,12 +623,12 @@ bool SyntaxAnalyzer::Params()
 			if(currentSymbol.getSymbolType() == RBracketSym)					//)
 			{
 				advance();
-				return true;
+				return make_pair(true,params);
 			}
 			else
 			{
 				errorInfo("')'");
-				return false;
+				return make_pair(false,params);
 			}
 
 			
@@ -621,13 +636,13 @@ bool SyntaxAnalyzer::Params()
 		else
 		{
 			errorInfo("id or ')'");
-			return false;
+			return make_pair(false,params);
 		}
 	}
 	else
 	{
 		errorInfo("'('");
-		return false;
+		return make_pair(false,params);
 	}
 
 }
@@ -678,75 +693,78 @@ bool SyntaxAnalyzer::Block()
 		return false;
 }
 
-bool SyntaxAnalyzer::FunBlock()
+pair<ExpressionInstruction*, vector<Instruction*> > SyntaxAnalyzer::FunBlock()
 {
+	vector<Instruction*> instructions;
 	Instruction* i;
-	if(currentSymbol.getSymbolType() == LBraceSym)						//{
+	ExpressionTreeNode* node;
+	ExpressionInstruction* e = NULL;
+
+	if(currentSymbol.getSymbolType() == LBraceSym)					//{
 	{
 		advance();
-		if(currentSymbol.getSymbolType() == RBraceSym)					//}
+													
+		for(;;)														//{Instruction | WhileStment | IfStment}
+		{
+				if(WhileStatement())
+				{
+					continue;
+				}
+				if(IfStatement())
+				{
+					continue;
+				}
+				i = InstructionS();
+				if(i != NULL)
+				{
+					instructions.push_back(i);
+					continue;
+				}
+				else break;
+		}
+		if(currentSymbol.getSymbolType() == ReturnSym)				//return
 		{
 			advance();
-			return true;
-		}
-		else														
-		{
-			for(;;)														//{Instruction | WhileStment | IfStment}
+			node = Expression();
+			if(node != NULL)										//expression
 			{
-					if(WhileStatement())
-					{
-						continue;
-					}
-					if(IfStatement())
-					{
-						continue;
-					}
-					i = InstructionS();
-					if(i != NULL)
-					{
-						InstructionList.push_back(i);
-						continue;
-					}
-					else break;
-			}
-			if(currentSymbol.getSymbolType() == ReturnSym)				//return
-			{
-				advance();
-				if(Expression())										//expression
+				if(currentSymbol.getSymbolType() == SemicolonSym)	//;
 				{
-					if(currentSymbol.getSymbolType() == SemicolonSym)	//;
+					int line = lexAnalyzer->getRow();				//line can change after ';'
+					advance();
+					if(currentSymbol.getSymbolType() == RBraceSym)	//}
 					{
+						
+						e = new ExpressionInstruction(node);
+						e->setLine(line);							
 						advance();
-						if(currentSymbol.getSymbolType() == RBraceSym)	//}
-						{
-							advance();
-							return true;
-						}
-						else
-						{
-							return false;
-						}
+						return make_pair(e, instructions);
 					}
 					else
 					{
-						errorInfo(";");
-						return false;
+						errorInfo("}");
+						return make_pair(e, instructions);
 					}
 				}
 				else
 				{
-					return false;
+					errorInfo(";");
+					return make_pair(e, instructions);
 				}
 			}
 			else
 			{
-				errorInfo("return");
-				return false;
-			}			
+				return make_pair(e, instructions);
+			}
 		}
+		else
+		{
+			errorInfo("return");
+			return make_pair(e, instructions);
+		}			
 	}
 	else
-		return false;
+		return make_pair(e, instructions);
 }
 
 Instruction* SyntaxAnalyzer::InstructionS()
@@ -779,11 +797,12 @@ Instruction* SyntaxAnalyzer::InstructionS()
 		
 		if(currentSymbol.getSymbolType() == SemicolonSym)			//declaration
 		{
-			advance();
+			
 			DeclarationInstruction* d = new DeclarationInstruction(var);
 			d->setLine(lexAnalyzer->getColumn());
+
 			//InstructionList.pu
-			
+			advance();
 			return d;
 		}
 		if(currentSymbol.getSymbolType() == AssigmentSym)			//assigment
@@ -794,10 +813,12 @@ Instruction* SyntaxAnalyzer::InstructionS()
 			{
 				if(currentSymbol.getSymbolType() == SemicolonSym)
 				{
-					advance();
+					
 					ExpressionInstruction* e = new ExpressionInstruction(node);
 					e->setLine(lexAnalyzer->getRow());
 					AssigmentInstruction* a = new AssigmentInstruction(var, e);
+					a->setLine(lexAnalyzer->getRow());
+					advance();
 					return a;
 				}
 				else
@@ -820,19 +841,26 @@ Instruction* SyntaxAnalyzer::InstructionS()
 	return false;
 }
 
-Instruction* SyntaxAnalyzer::FunCall()
+FunInstruction* SyntaxAnalyzer::FunCall()
 {
 	FunInstruction* f;
+	string id;
+	pair<bool, vector<string> > paramsReturn;
+
 	if(currentSymbol.getSymbolType() == CaretSym)
 	{
 		advance();
 		if(currentSymbol.getSymbolType() == IdentSym)
 		{
+			id = currentSymbol.getValue();
 			advance();
-			if(Params())
+
+			paramsReturn = Params();
+			if(paramsReturn.first)
 			{
 				//f.execute();
-				f = new FunInstruction();
+				f = new FunInstruction(id, paramsReturn.second);
+				f->setLine(lexAnalyzer->getRow());
 				return f;
 			}
 			else
@@ -883,14 +911,18 @@ Instruction* SyntaxAnalyzer::PrintCall()
 				advance();
 				if(currentSymbol.getSymbolType() == SemicolonSym)			//;
 				{
-					advance();
+					
 					if(isText)
 						p = new PrintInstruction(text);		//TODO: zmienic konstruktor
 					else
 					{
 						ExpressionInstruction* e = new ExpressionInstruction(node);
+						e->setLine(lexAnalyzer->getRow());
 						p = new PrintInstruction(e);
 					}
+					p->setLine(lexAnalyzer->getRow());
+
+					advance();
 					return p;
 				}
 				else
