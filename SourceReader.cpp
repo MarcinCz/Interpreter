@@ -23,12 +23,12 @@ bool SourceReader::openSource(string _source)
 	inputStream.open(source.c_str());
 	if(!inputStream)
 	{
-		cout<<"Nie mo¿na otworzyæ pliku "<<source<<endl;
+		cout<<"Cannot open file '"<<source<<"'"<<endl;
 		return false;
 	}
 	if(!getNextLine())
 	{
-		cout<<"Pusty plik "<<source<<endl;
+		cout<<"Empty file "<<source<<endl;
 		return false;
 	}
 	return true;

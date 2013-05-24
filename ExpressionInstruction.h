@@ -18,6 +18,8 @@ enum ExpressionTreeNodeType
 
 /**************ExpressionTreeNode************************/
 
+class ExpressionInstruction;
+
 class ExpressionTreeNode
 {
 public:
@@ -43,7 +45,9 @@ public:
 		type = funNodeType;
 		nodeFunInstruction = _nodeFunInstruction;
 	}
-	~ExpressionTreeNode(){}
+	~ExpressionTreeNode(){
+		//clearTree(this);
+	}
 
 	//Getters
 	int						getChildrenCount(){ return children.size(); }
@@ -104,6 +108,7 @@ public:
 	bool execute();
 	ExpressionTreeNode* getRoot();
 	Value* getResult();
+	
 
 private:
 	void clearTree(ExpressionTreeNode* node);

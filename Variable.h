@@ -33,6 +33,10 @@ public:
 		type = FractType;
 		valueString = _fractVal->toString();
 	}
+	Value(string _valueString)
+	{
+		valueString =_valueString;
+	}
 	~Value(){ /*if(type = FractType) delete fractVal;*/}
 
 	bool isFraction() { return type == FractType; }
@@ -42,7 +46,7 @@ public:
 	VarType getType() { return type; }
 	string toString() { return valueString; }
 	void setType(VarType _type) { type =_type; }
-	void setValue(string _value) { valueString =_value; } 
+	void setValue(string _valueString) { valueString =_valueString; } 
 	void setValue(Fraction _fractVal) { valueString = _fractVal.toString(); type = FractType; }
 	void setValue(bool _boolVal) 
 	{ 
@@ -91,9 +95,9 @@ public:
 
 	Value* getValue() { return value; }
 	string getName() { return name; }
-	int getLevel() {return level;}
+	int getLevel() { return level; }
 
-	void setValue(Value* _value) { value = _value; }
+	void setValue(Value* _value) { delete value, value = _value; }
 	void setName(string _name) { name = _name; }
 	void setLevel(int _level) {level = _level;}
 		

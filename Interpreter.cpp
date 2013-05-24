@@ -4,12 +4,14 @@
 Interpreter::Interpreter(void)
 {
 	stackLevel = 0;
+	onlyHighestStack = false;
 	variableStack.push_back(vector<Variable *>());
 }
 
 Interpreter::Interpreter(vector<Instruction* > _instructionList)
 {
 	stackLevel = 0;
+	onlyHighestStack = false;
 	variableStack.push_back(vector<Variable *>());
 	instructionList = _instructionList;
 }
@@ -36,7 +38,9 @@ Variable* Interpreter::getVariable(string _varName)
 {
 	for(int i = stackLevel; i>=0; i--)				//loop on every stack level from the highest
 	{
-		
+		if(onlyHighestStack && i==stackLevel-1)		//if only highest stack is checked
+			return NULL;
+
 		for(size_t j = 0; j < variableStack.at(i).size(); j++)	//checks one level
 		{			
 			if(variableStack.at(i).at(j)->getName() == _varName)
@@ -161,3 +165,7 @@ void Interpreter::setInstructionList(vector<Instruction* > _instructionList)
 	instructionList = _instructionList;
 }
 
+void Interpreter::setOnlyHighestStack(bool _onlyHighestStack)
+{
+	onlyHighestStack = _onlyHighestStack;
+}

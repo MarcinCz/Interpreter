@@ -13,6 +13,7 @@ public:
 	~Fraction(void);
 
 	bool isZero();
+	bool isDenominatorZero();
 	string toString();
 
 	Fraction operator+(const Fraction& f);
@@ -31,6 +32,8 @@ public:
 	bool operator<(const Fraction& f) const;
 	bool operator>=(const Fraction& f) const;
 	bool operator<=(const Fraction& f) const;
+
+
 
 private:
 	int integer;

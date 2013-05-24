@@ -38,6 +38,7 @@ bool IfInstruction::execute()
 		if(val->isBool())
 		{
 			interpr->increaseStackLevel();
+			
 			if(val->toBool())										//if true
 			{
 				
@@ -45,7 +46,10 @@ bool IfInstruction::execute()
 				{
 					ifInstr.at(i)->setInterpreter(interpr);
 					if(!ifInstr.at(i)->execute())
+					{
+						
 						return false;
+					}
 				}
 				
 			}
@@ -56,9 +60,13 @@ bool IfInstruction::execute()
 				{
 					elseInstr.at(i)->setInterpreter(interpr);
 					if(!elseInstr.at(i)->execute())
+					{
+						
 						return false;
+					}
 				}
 			}
+			
 			interpr->decreaseStackLevel();
 		}
 		else

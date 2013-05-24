@@ -5,26 +5,40 @@
 #include "Interpreter.h"
 #include "Variable.h"
 #include "Fraction.h"
+#include <vld.h>
 #include <sstream>
+
 
 int main(int argc, char *argv[])
 {
-	SourceReader sr;
-	sr.openSource("dane3.txt");
-	LexicalAnalyzer* la = new LexicalAnalyzer(&sr);
-	Symbol s(AndSym, "a",1,1);
+	for(;;)
+	{
+
+		cout<<"File to interpret: ";
+		string fileName;
+		cin>>fileName;
+		if(fileName=="exit")
+			break;
+		SourceReader sr;
+		if(!sr.openSource(fileName))
+			continue;
+		LexicalAnalyzer* la = &LexicalAnalyzer(&sr);
+		SyntaxAnalyzer sa(la);
+		if(sa.Program())
+		{
+			Interpreter in(sa.getInstructionList());
+			in.executeInstructions();
+		}
+		cout<<"\n";
+
+	}
 	/*while(s.getSymbolType()!=EOFSym)
 	{
 		s=la->getNextSymbol();
 		cout<< s.getSymbolType() <<": "<<s.getValue()<< " c:"<<s.getPosition().first <<" r:"<< s.getPosition().second<<endl;
 	}*/
 	
-	SyntaxAnalyzer sa(la);
-	if(sa.Program())
-	{
-		Interpreter in(sa.getInstructionList());
-		in.executeInstructions();
-	}
+	
 
 	/*Fraction f1("1");
 	Fraction f2("3");

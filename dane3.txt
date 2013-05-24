@@ -3,18 +3,30 @@ function reverseBool(a)
 return !a;
 }
 
+f;
+f=3.1/2;
+f=4+(0.1/2)*(3.3/14-2.1/12 / 3.0/5);
+
+while(f>0)
+{
+print(f);
+f=f-1;
+}
+
 a;
 a=false;
+
 if(^reverseBool(a))
 {
-print("true");
+print(a);
+a;
+a=true;
+print(a);
 }
 else
 {
 print("false");
 }
-
-
 
 d;
 b;

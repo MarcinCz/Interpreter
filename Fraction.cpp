@@ -80,8 +80,8 @@ void Fraction::normalize()
 		}
 	}
 
-	if(numerator == 0)
-		denominator = 1;
+	/*if(numerator == 0)
+		denominator = 1;*/
 
 	if(isZero())
 	{
@@ -115,6 +115,11 @@ bool Fraction::isZero()
 		return true;
 	else
 		return false;
+}
+
+bool Fraction::isDenominatorZero()
+{
+	return denominator==0;
 }
 
 string Fraction::toString()

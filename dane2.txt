@@ -1,6 +1,4 @@
 d;
-c;
 d=1;
-c=1;
-
-d=c-1 and true;
+b;
+b=d;

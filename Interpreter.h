@@ -42,8 +42,10 @@ public:
 	void increaseStackLevel();
 	void decreaseStackLevel();
 	void setInstructionList(vector<Instruction* > instructionList);
+	void setOnlyHighestStack(bool onlyHighestStack);
 private:
 	int stackLevel;
+	bool onlyHighestStack;		//for functions
 	vector<vector<Variable* > > variableStack;
 	vector<Function* > functionList;
 	vector<Instruction* > instructionList;

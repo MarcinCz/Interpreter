@@ -81,8 +81,10 @@ bool SyntaxAnalyzer::ProgramLine()
 bool SyntaxAnalyzer::Statement()
 {
 	Instruction* i;
-	if(WhileStatement())
+	i = WhileStatement();
+	if(i != NULL)
 	{
+		InstructionList.push_back(i);
 		return true;
 	}
 	i = IfStatement();
@@ -101,9 +103,10 @@ bool SyntaxAnalyzer::Statement()
 		return false;
 }
 
-bool SyntaxAnalyzer::WhileStatement()
+Instruction* SyntaxAnalyzer::WhileStatement()
 {
-	WhileInstruction w;
+	WhileInstruction* w;
+	ExpressionTreeNode* node;
 	pair<bool,vector<Instruction*> > blockReturn;
 
 
@@ -113,7 +116,9 @@ bool SyntaxAnalyzer::WhileStatement()
 		if(currentSymbol.getSymbolType() == LBracketSym)			//(
 		{
 			advance();
-			if(Expression())										//expr
+			int line = lexAnalyzer->getRow();
+			node = Expression();
+			if(node != NULL)										//expr
 			{				
 				if(currentSymbol.getSymbolType() == RBracketSym)	//)
 				{
@@ -121,9 +126,11 @@ bool SyntaxAnalyzer::WhileStatement()
 					blockReturn = Block();
 					if(blockReturn.first)										//block
 					{
-						
-						w.execute();
-						return true;
+						ExpressionInstruction* exprInstr = new ExpressionInstruction(node);
+						exprInstr->setLine(line);
+						w = new WhileInstruction(exprInstr, blockReturn.second);
+						w->setLine(line);
+						return w;
 					}
 					else
 						return false;
@@ -254,43 +261,7 @@ Instruction* SyntaxAnalyzer::FunStatement()
 	else return false;
 }
 
-//bool SyntaxAnalyzer::Assigment()  //TODO. zwraca assigmentInstruction
-//{
-//	AssigmentInstruction w;
-//	if(currentSymbol.getSymbolType() == IdentSym)					//id
-//	{
-//		advance();
-//		if(currentSymbol.getSymbolType() == AssigmentSym)			//=
-//		{
-//			advance();
-//			if(Expression())										//expr
-//			{
-//				if(currentSymbol.getSymbolType() == SemicolonSym)	//;
-//				{
-//					w.execute();
-//					return true;
-//				}
-//				else
-//				{
-//					errorInfo("';'");
-//					return false;
-//				}
-//				
-//			}
-//			else
-//				return false;
-//		}
-//		else
-//		{
-//			errorInfo("'='");
-//			return false;
-//		}
-//	}
-//	else
-//		return false;
-//}
-
-ExpressionTreeNode* SyntaxAnalyzer::Expression()  //TODO:zwraca
+ExpressionTreeNode* SyntaxAnalyzer::Expression()  
 {
 	SymbolType s;
 	ExpressionTreeNode* node;
@@ -320,12 +291,14 @@ ExpressionTreeNode* SyntaxAnalyzer::Expression()  //TODO:zwraca
 			else
 			{
 				delete node;
+				delete returnNode;
 				return false;
 			}
 		}
 		else
 		{
 			//w.execute();
+			delete returnNode;
 			return node;
 		}
 	}
@@ -370,6 +343,7 @@ ExpressionTreeNode* SyntaxAnalyzer::SimpleExpression()
 					{
 						delete returnNode->getChildAt(i);
 					}
+					delete returnNode;
 					return false;
 				}
 			}
@@ -378,10 +352,12 @@ ExpressionTreeNode* SyntaxAnalyzer::SimpleExpression()
 				if(i == 0)
 				{
 					delete returnNode;
-					return node;		//parent set to deleted object for a moment
+					return node;		
 				}
 				else
+				{
 					return returnNode;
+				}
 			}
 		}
 	}
@@ -425,6 +401,7 @@ ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 					{
 						delete returnNode->getChildAt(i);
 					}
+					delete returnNode;
 					return false;
 				}
 			}
@@ -448,7 +425,7 @@ ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 {
 	FunInstruction* i;
-	Fraction* f;
+	string f;
 	ExpressionTreeNode* node;
 	ExpressionTreeNode* returnNode;
 
@@ -480,9 +457,11 @@ ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 	}
 
 	f = FractConst();
-	if(f != NULL)													//fract
+	if(f != "")													//fract
 	{
-		returnNode = new ExpressionTreeNode(new Value(f));
+		Value* val = new Value(f);
+		val->setType(FractType);
+		returnNode = new ExpressionTreeNode(val);
 		return returnNode;
 	}
 
@@ -686,9 +665,11 @@ pair<bool,vector<Instruction*> > SyntaxAnalyzer::Block()
 		{
 			for(;;)														//{Instruction | WhileStment | IfStment}
 			{
-					if(WhileStatement())
+					i = WhileStatement();
+					if(i != NULL)
 					{
-						continue;										
+						instructions.push_back(i);
+						continue;
 					}
 					
 					i = IfStatement();
@@ -734,8 +715,10 @@ pair<ExpressionInstruction*, vector<Instruction*> > SyntaxAnalyzer::FunBlock()
 													
 		for(;;)														//{Instruction | WhileStment | IfStment}
 		{
-				if(WhileStatement())
+				i = WhileStatement();
+				if(i != NULL)
 				{
+					instructions.push_back(i);
 					continue;
 				}
 				i = IfStatement();
@@ -830,8 +813,6 @@ Instruction* SyntaxAnalyzer::InstructionS()
 			
 			DeclarationInstruction* d = new DeclarationInstruction(var);
 			d->setLine(lexAnalyzer->getColumn());
-
-			//InstructionList.pu
 			advance();
 			return d;
 		}
@@ -979,7 +960,7 @@ Instruction* SyntaxAnalyzer::PrintCall()
 		return false;
 	}
 }
-Fraction* SyntaxAnalyzer::FractConst()
+string SyntaxAnalyzer::FractConst()
 {
 	stringstream fractStream;
 	if(currentSymbol.getSymbolType() == MinusSym)						//-
@@ -1008,39 +989,39 @@ Fraction* SyntaxAnalyzer::FractConst()
 					{
 						fractStream << currentSymbol.getValue();
 						advance();
-						Fraction* f = new Fraction(fractStream.str());
+						//Fraction* f = new Fraction(fractStream.str());
 						//cout << f->toString() << endl;
-						return f;
+						return fractStream.str();
 					}
 					else
 					{
 						errorInfo("integer");
-						return false;
+						return "";
 					}
 
 					}
 				else
 				{
 					errorInfo("'/'");
-					return false;
+					return "";
 				}
 			}
 			else
 			{
 				errorInfo("integer");
-				return false;
+				return "";
 			}
 
 		}
 		else
 		{
-			Fraction* f = new Fraction(fractStream.str());
+			//Fraction* f = new Fraction(fractStream.str());
 			//cout << f.toString() << endl;
-			return f;
+			return fractStream.str();
 		}
 	}
 	else
 	{
-		return false;
+		return "";
 	}
 }

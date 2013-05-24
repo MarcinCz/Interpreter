@@ -27,6 +27,7 @@ bool FunInstruction::execute()
 	if(fun != NULL)
 	{
 		interpr->increaseStackLevel();
+		interpr->setOnlyHighestStack(true);
 		for(size_t i=0; i<params.size(); i++)						//try to get variables from parameters
 		{
 			Variable* var = interpr->getVariableFromLowerStack(params.at(i));
@@ -40,30 +41,38 @@ bool FunInstruction::execute()
 					{
 						fun->getInstructions().at(j)->setInterpreter(interpr);
 						if(!fun->getInstructions().at(j)->execute())				//if execution failed return
+						{	
+							interpr->setOnlyHighestStack(false);
 							return false;
+						}
 					}
 
 					fun->getReturnExpr()->setInterpreter(interpr);
 					if(fun->getReturnExpr()->execute())								//calc return value
 						result=fun->getReturnExpr()->getResult();
 					else
+					{
+						interpr->setOnlyHighestStack(false);
 						return false;
+					}
 				}
 				else
 				{
+					interpr->setOnlyHighestStack(false);
 					cout<<"Line "<<line<<": Undefined variable '"<<params.at(i)<<"' used in function call"<<endl;
 					return false;
 				}
 			}
 			else
 			{
+				interpr->setOnlyHighestStack(false);
 				cout<<"Line "<<line<<": Undeclared variable '"<<params.at(i)<<"' used in function call"<<endl;
 				return false;
 			}
 
 		}
 
-
+		interpr->setOnlyHighestStack(false);
 		interpr->decreaseStackLevel();
 		return true;
 	}

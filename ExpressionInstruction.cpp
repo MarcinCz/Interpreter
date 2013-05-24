@@ -13,9 +13,10 @@ ExpressionInstruction::ExpressionInstruction(ExpressionTreeNode* _root)
 
 ExpressionInstruction::~ExpressionInstruction(void)
 {
+	ExpressionTreeNode* node;
 	clearTree(root);
 	delete root;
-	//delete result;
+	delete result;
 }
 
 void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
@@ -25,13 +26,13 @@ void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
 		switch(node->getType())
 		{
 		case variableNodeType:
-			//delete node->getVariable();
+			delete node->getVariable();
 			break;
 		case funNodeType:
 			delete node->getFunInstruction();
 			break;
 		case valueNodeType:
-			//delete node->getValue();
+			delete node->getValue();
 			break;
 		}
 		return;
@@ -51,7 +52,6 @@ bool ExpressionInstruction::execute()
 
 	if(result)
 	{
-		result = new Value(result);
 		cout<<"----------"<<result->toString()<<endl;
 		return true;
 	}
@@ -78,13 +78,19 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			return NULL;
 		}
 		
-		return var->getValue();
+		return new Value(var->getValue());
 		
 	}
 
 	if(root->getType() == valueNodeType)					//value node
 	{
-		return root->getValue();
+		if(root->getValue()->isFraction() && root->getValue()->toFraction().isDenominatorZero())
+		{
+			cout << "Line "<<line<<": Division by zero"<<endl;
+			root->setType(errorNodeType);
+			return NULL;
+		}
+		return new Value(root->getValue());
 	}
 
 	if(root->getType() == funNodeType)
@@ -92,7 +98,8 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 		root->getFunInstruction()->setInterpreter(interpr);
 		if(root->getFunInstruction()->execute())
 		{
-			return root->getFunInstruction()->getResult();
+			return new Value(root->getFunInstruction()->getResult());
+			
 		}
 		
 		root->setType(errorNodeType);
@@ -107,7 +114,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			return NULL;
 		}
 
-		Value* val = calcTreeValue(root->getChildAt(0));
+		Value* val = new Value(calcTreeValue(root->getChildAt(0)));
 
 		if(root->getChildAt(0)->getType() == errorNodeType)
 		{
@@ -118,6 +125,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 		{
 			root->setType(errorNodeType);
 			cout<< "Line "<<line<<": Negating non-bool expression"<<endl;
+			delete val;
 			return NULL;
 		}
 
@@ -160,6 +168,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			if(root->getChildAt(i+1)->getType() == errorNodeType)
 			{
 				root->setType(errorNodeType);
+				delete valLeft;
 				return NULL;
 			}
 
@@ -173,6 +182,8 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 				{
 					cout << "Line "<<line<<": Type mismatch in expression (expected fraction, got bool)"<<endl;
 					root->setType(errorNodeType);
+					delete valLeft;
+					delete valRight;
 					return NULL;
 				}
 
@@ -195,6 +206,14 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 					}
 					case DivideSym:
 					{
+						if(valRight->toFraction().isZero())
+						{
+							cout << "Line "<<line<<": Division by zero"<<endl;
+							root->setType(errorNodeType);
+							delete valLeft;
+							delete valRight;
+							return NULL;
+						}
 						valLeft->setValue((valLeft->toFraction()) / (valRight->toFraction()));
 						break;
 					}
@@ -239,6 +258,8 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 				{
 					cout << "Line "<<line<<": Type mismatch in expression (expected bool, got fract)"<<endl;
 					root->setType(errorNodeType);
+					delete valLeft;
+					delete valRight;
 					return NULL;
 				}
 
@@ -257,9 +278,12 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 					}
 				}
 			}
+			delete valRight;
 		}//for
 		//valReturned->setValue(valLeft->getValue());
-		return new Value(valLeft);
+		Value* returnVal = new Value(valLeft);
+		delete valLeft;
+		return returnVal;
 	}
 
 	root->setType(errorNodeType);

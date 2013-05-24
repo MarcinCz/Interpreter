@@ -47,7 +47,7 @@ private:
 
 	bool ProgramLine();
 	bool Statement();
-	bool WhileStatement();
+	Instruction* WhileStatement();
 	Instruction* IfStatement();
 	Instruction* FunStatement();
 
@@ -66,7 +66,7 @@ private:
 	Instruction* InstructionS();
 	FunInstruction* FunCall();
 	Instruction* PrintCall();
-	Fraction* FractConst();
+	string FractConst();
 
 	void advance();
 	void errorInfo(string info);
