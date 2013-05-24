@@ -59,7 +59,7 @@ bool SyntaxAnalyzer::Program()
 bool SyntaxAnalyzer::ProgramLine()
 {
 	Instruction* i;
-	//i = Statement();
+
 	if(Statement())
 		return true;
 	else 
@@ -85,8 +85,10 @@ bool SyntaxAnalyzer::Statement()
 	{
 		return true;
 	}
-	if(IfStatement())
+	i = IfStatement();
+	if(i != NULL)
 	{
+		InstructionList.push_back(i);
 		return true;
 	}
 	i = FunStatement();
@@ -102,6 +104,9 @@ bool SyntaxAnalyzer::Statement()
 bool SyntaxAnalyzer::WhileStatement()
 {
 	WhileInstruction w;
+	pair<bool,vector<Instruction*> > blockReturn;
+
+
 	if(currentSymbol.getSymbolType() == WhileSym)					//while
 	{
 		advance();
@@ -113,7 +118,8 @@ bool SyntaxAnalyzer::WhileStatement()
 				if(currentSymbol.getSymbolType() == RBracketSym)	//)
 				{
 					advance();
-					if(Block())										//block
+					blockReturn = Block();
+					if(blockReturn.first)										//block
 					{
 						
 						w.execute();
@@ -140,34 +146,50 @@ bool SyntaxAnalyzer::WhileStatement()
 	else return false;
 }
 
-bool SyntaxAnalyzer::IfStatement()
+Instruction* SyntaxAnalyzer::IfStatement()
 {
-	IfInstruction w;
+	IfInstruction* ifInstr;
+	ExpressionTreeNode* node;
+	pair<bool,vector<Instruction*> > ifBlockReturn;
+	pair<bool,vector<Instruction*> > elseBlockReturn;
+
 	if(currentSymbol.getSymbolType() == IfSym)					//if
 	{
 		advance();
 		if(currentSymbol.getSymbolType() == LBracketSym)			//(
 		{
 			advance();
-			if(Expression())										//expr
+			node = Expression();
+			int line = lexAnalyzer->getRow();
+			if(node != NULL)										//expr
 			{
 				if(currentSymbol.getSymbolType() == RBracketSym)	//)
 				{
 					advance();
-					if(Block())										//block
+					ifBlockReturn = Block();
+					if(ifBlockReturn.first)										//block
 					{
+
 						if(currentSymbol.getSymbolType() == ElseSym)//else
 						{
 							advance();
-							if(Block())								//block
+							elseBlockReturn = Block();
+							if(elseBlockReturn.first)								//block
 							{
-								w.execute();
-								return true;
+								ExpressionInstruction* exprInstr = new ExpressionInstruction(node);
+								exprInstr->setLine(line);
+								ifInstr = new IfInstruction(exprInstr, ifBlockReturn.second, elseBlockReturn.second);
+								ifInstr->setLine(line);
+								return ifInstr;
 							}
 							return false;
 						}					
-						w.execute();
-						return true;
+						
+						ExpressionInstruction* exprInstr = new ExpressionInstruction(node);
+						exprInstr->setLine(line);
+						ifInstr = new IfInstruction(exprInstr, ifBlockReturn.second, elseBlockReturn.second);
+						ifInstr->setLine(line);
+						return ifInstr;
 					}
 					else return false;
 				}
@@ -647,16 +669,18 @@ pair<bool, vector<string> > SyntaxAnalyzer::Params()
 
 }
 
-bool SyntaxAnalyzer::Block()
+pair<bool,vector<Instruction*> > SyntaxAnalyzer::Block()
 {
 	Instruction* i;
+	vector<Instruction*> instructions;
+
 	if(currentSymbol.getSymbolType() == LBraceSym)						//{
 	{
 		advance();
 		if(currentSymbol.getSymbolType() == RBraceSym)					//}
 		{
 			advance();
-			return true;
+			return make_pair(true, instructions);
 		}
 		else														
 		{
@@ -664,16 +688,20 @@ bool SyntaxAnalyzer::Block()
 			{
 					if(WhileStatement())
 					{
-						continue;
+						continue;										
 					}
-					if(IfStatement())
+					
+					i = IfStatement();
+					if(i != NULL)
 					{
+						instructions.push_back(i);
 						continue;
 					}
+					
 					i = InstructionS();
 					if(i != NULL)
 					{
-						InstructionList.push_back(i);
+						instructions.push_back(i);
 						continue;
 					}
 					else break;
@@ -681,16 +709,16 @@ bool SyntaxAnalyzer::Block()
 			if(currentSymbol.getSymbolType() == RBraceSym)				//}
 			{
 				advance();
-				return true;
+				return make_pair(true, instructions);
 			}
 			else
 			{
-				return false;
+				return make_pair(false, instructions);
 			}
 		}
 	}
 	else
-		return false;
+		return make_pair(false, instructions);
 }
 
 pair<ExpressionInstruction*, vector<Instruction*> > SyntaxAnalyzer::FunBlock()
@@ -710,8 +738,10 @@ pair<ExpressionInstruction*, vector<Instruction*> > SyntaxAnalyzer::FunBlock()
 				{
 					continue;
 				}
-				if(IfStatement())
+				i = IfStatement();
+				if(i != NULL)
 				{
+					instructions.push_back(i);
 					continue;
 				}
 				i = InstructionS();

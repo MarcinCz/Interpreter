@@ -2,6 +2,20 @@ function reverseBool(a)
 {
 return !a;
 }
+
+a;
+a=false;
+if(^reverseBool(a))
+{
+print("true");
+}
+else
+{
+print("false");
+}
+
+
+
 d;
 b;
 d=1;

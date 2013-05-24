@@ -48,7 +48,7 @@ private:
 	bool ProgramLine();
 	bool Statement();
 	bool WhileStatement();
-	bool IfStatement();
+	Instruction* IfStatement();
 	Instruction* FunStatement();
 
 	//bool Assigment();
@@ -61,7 +61,7 @@ private:
 	SymbolType OrOp();
 
 	pair<bool,vector<string> > Params();
-	bool Block();
+	pair<bool,vector<Instruction*> > Block();
 	pair<ExpressionInstruction*, vector<Instruction*> > FunBlock();
 	Instruction* InstructionS();
 	FunInstruction* FunCall();
