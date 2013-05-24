@@ -290,7 +290,7 @@ ExpressionTreeNode* SyntaxAnalyzer::Expression()
 			}
 			else
 			{
-				delete node;
+				e->clearTree(returnNode);
 				delete returnNode;
 				return false;
 			}
@@ -298,6 +298,7 @@ ExpressionTreeNode* SyntaxAnalyzer::Expression()
 		else
 		{
 			//w.execute();
+			
 			delete returnNode;
 			return node;
 		}
@@ -338,11 +339,8 @@ ExpressionTreeNode* SyntaxAnalyzer::SimpleExpression()
 				}
 				else
 				{
-					delete node;
-					for(int i=0; i<returnNode->getChildrenCount(); i++)
-					{
-						delete returnNode->getChildAt(i);
-					}
+					
+					e->clearTree(returnNode);
 					delete returnNode;
 					return false;
 				}
@@ -396,11 +394,7 @@ ExpressionTreeNode* SyntaxAnalyzer::OrExpression()
 				}
 				else
 				{
-					delete node;
-					for(int i=0; i<returnNode->getChildrenCount(); i++)
-					{
-						delete returnNode->getChildAt(i);
-					}
+					e->clearTree(returnNode);
 					delete returnNode;
 					return false;
 				}
@@ -444,6 +438,7 @@ ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 		}
 		else
 		{
+			e->clearTree(returnNode);
 			delete returnNode;
 			return false;
 		}
@@ -495,6 +490,7 @@ ExpressionTreeNode* SyntaxAnalyzer::AndExpression()
 			}
 			else
 			{
+				e->clearTree(node);
 				delete node;
 				errorInfo("')'");
 				return false;

@@ -103,7 +103,4 @@ int main(int argc, char *argv[])
 
 	cout << v.at(0).at(0);*/
 	
-	
-	
-	cout << "asd";
 }

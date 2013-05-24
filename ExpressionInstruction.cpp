@@ -9,14 +9,14 @@ ExpressionInstruction::ExpressionInstruction(void)
 ExpressionInstruction::ExpressionInstruction(ExpressionTreeNode* _root)
 {
 	root = _root;
+	result = NULL;
 }
 
 ExpressionInstruction::~ExpressionInstruction(void)
 {
-	ExpressionTreeNode* node;
 	clearTree(root);
 	delete root;
-	delete result;
+	if(result) delete result;
 }
 
 void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
@@ -38,7 +38,7 @@ void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
 		return;
 	}
 
-	for(int i=0; node->getChildrenCount()<i; i++)
+	for(int i=0; i < node->getChildrenCount(); i++)
 	{
 		clearTree(node->getChildAt(i));
 		delete node->getChildAt(i);

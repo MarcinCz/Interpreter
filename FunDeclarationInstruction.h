@@ -17,7 +17,7 @@ public:
 	}
 	~Function()
 	{
-		//delete returnExpr;
+		delete returnExpr;
 		for(size_t i = 0; i<instructions.size(); i++)
 			delete instructions.at(i);
 	}

@@ -108,10 +108,11 @@ public:
 	bool execute();
 	ExpressionTreeNode* getRoot();
 	Value* getResult();
+	void clearTree(ExpressionTreeNode* node);
 	
 
 private:
-	void clearTree(ExpressionTreeNode* node);
+	
 	Value* calcTreeValue(ExpressionTreeNode* node);
 	ExpressionTreeNode* root;
 	Value* result;

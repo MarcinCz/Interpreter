@@ -73,5 +73,6 @@ private:
 	Symbol currentSymbol;
 	vector<Instruction*> InstructionList;
 	LexicalAnalyzer* lexAnalyzer;
+	ExpressionInstruction* e;
 };
 
