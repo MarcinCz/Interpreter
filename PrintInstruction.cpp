@@ -1,6 +1,6 @@
 #include "PrintInstruction.h"
 #include "ExpressionInstruction.h"
-
+#include "Interpreter.h"
 
 PrintInstruction::PrintInstruction(void)
 {
@@ -26,7 +26,7 @@ PrintInstruction::~PrintInstruction(void)
 
 bool PrintInstruction::execute()
 {
-		cout<<"----------Print"<<endl;
+		if(interpr->isTrace()) cout<<"----------Print"<<endl;
 		if(isText)
 		{
 			cout << toPrint <<endl;

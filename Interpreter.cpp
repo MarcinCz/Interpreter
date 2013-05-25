@@ -3,6 +3,7 @@
 
 Interpreter::Interpreter(void)
 {
+	trace = false;
 	stackLevel = 0;
 	onlyHighestStack = false;
 	variableStack.push_back(vector<Variable *>());
@@ -10,6 +11,7 @@ Interpreter::Interpreter(void)
 
 Interpreter::Interpreter(vector<Instruction* > _instructionList)
 {
+	trace = false;
 	stackLevel = 0;
 	onlyHighestStack = false;
 	variableStack.push_back(vector<Variable *>());
@@ -168,4 +170,14 @@ void Interpreter::setInstructionList(vector<Instruction* > _instructionList)
 void Interpreter::setOnlyHighestStack(bool _onlyHighestStack)
 {
 	onlyHighestStack = _onlyHighestStack;
+}
+
+void Interpreter::setTrace(bool _trace)
+{
+	trace = _trace;
+}
+
+bool Interpreter::isTrace()
+{
+	return trace;
 }

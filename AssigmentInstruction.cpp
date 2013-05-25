@@ -17,11 +17,12 @@ AssigmentInstruction::~AssigmentInstruction(void)
 
 bool AssigmentInstruction::execute()
 {
-	cout<<"----------Assigment"<<endl;
+	if(interpr->isTrace()) cout<<"----------Assigment"<<endl;
 	Variable* var = interpr->getVariable(varName);						//get variable
 	if(var != NULL)
 	{
 		expr->setInterpreter(this->interpr);
+		//if(expr->getResult()) delete expr->getResult();
 		if(expr->execute())												//calc expression
 		{
 			Value* val =new Value(expr->getResult());

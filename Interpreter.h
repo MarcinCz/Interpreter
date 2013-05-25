@@ -43,11 +43,15 @@ public:
 	void decreaseStackLevel();
 	void setInstructionList(vector<Instruction* > instructionList);
 	void setOnlyHighestStack(bool onlyHighestStack);
+
+	void setTrace(bool trace);
+	bool isTrace();
 private:
 	int stackLevel;
 	bool onlyHighestStack;		//for functions
 	vector<vector<Variable* > > variableStack;
 	vector<Function* > functionList;
 	vector<Instruction* > instructionList;
+	bool trace;
 };
 

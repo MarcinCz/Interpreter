@@ -1,16 +1,13 @@
 d;
 d=1;
 
-function fun(a)
-{
-b;
-b=1;
-return b;
-}
 
 
-if(d>0)
+while(d>0)
 {
+
+d=0;
 	##d=^fun(d);
 	##b=b+1*2;
+
 }

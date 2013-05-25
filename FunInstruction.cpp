@@ -21,7 +21,7 @@ Value* FunInstruction::getResult()
 }
 bool FunInstruction::execute()
 {
-	cout<<"----------FunCall"<<endl;
+	if(interpr->isTrace()) cout<<"----------FunCall"<<endl;
 
 	Function *fun = interpr->getFunction(name,params.size());	//check if function is declared
 	if(fun != NULL)
@@ -48,6 +48,8 @@ bool FunInstruction::execute()
 					}
 
 					fun->getReturnExpr()->setInterpreter(interpr);
+					
+					//if(expr->getResult()) delete expr->getResult();
 					if(fun->getReturnExpr()->execute())								//calc return value
 						result=fun->getReturnExpr()->getResult();
 					else

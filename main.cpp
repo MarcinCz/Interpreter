@@ -5,28 +5,52 @@
 #include "Interpreter.h"
 #include "Variable.h"
 #include "Fraction.h"
-#include <vld.h>
+//#include <vld.h>
 #include <sstream>
 
 
 int main(int argc, char *argv[])
 {
+
+	cout<<"Commands:"<<endl;
+	cout<<"\t <file name> - file interpretation"<<endl;
+	cout<<"\t trace - turns on/off trace"<<endl;
+	cout<<"\t exit - closes application"<<endl;
+	cout<<"\t help - shows help"<<endl<<endl;
+
+	bool trace = false;
+
 	for(;;)
 	{
 
-		cout<<"File to interpret: ";
-		string fileName;
-		cin>>fileName;
-		if(fileName=="exit")
+		cout<<"Interpreter> ";
+		string command;
+		cin>>command;
+		if(command == "exit")
 			break;
+		if(command == "trace")
+		{
+			trace = !trace;
+			continue;
+		}
+		if(command == "help")
+		{
+			cout<<endl<<"Commands:"<<endl;
+			cout<<"\t <file name> - file interpretation"<<endl;
+			cout<<"\t trace - turns on/off trace"<<endl;
+			cout<<"\t exit - closes application"<<endl;
+			cout<<"\t help - shows help"<<endl;
+			continue;
+		}
 		SourceReader sr;
-		if(!sr.openSource(fileName))
+		if(!sr.openSource(command))
 			continue;
 		LexicalAnalyzer* la = &LexicalAnalyzer(&sr);
 		SyntaxAnalyzer sa(la);
 		if(sa.Program())
 		{
 			Interpreter in(sa.getInstructionList());
+			in.setTrace(trace);
 			in.executeInstructions();
 		}
 		cout<<"\n";

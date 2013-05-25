@@ -29,11 +29,13 @@ IfInstruction::~IfInstruction(void)
 
 bool IfInstruction::execute()
 {
-	cout<<"----------If"<<endl;
+	if(interpr->isTrace()) cout<<"----------If"<<endl;
 
 	expr->setInterpreter(this->interpr);
+	//if(expr->getResult()) delete expr->getResult();
 	if(expr->execute())												//calc expression
 	{
+		
 		Value* val =expr->getResult();								//get result
 		if(val->isBool())
 		{

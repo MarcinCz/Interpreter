@@ -22,12 +22,13 @@ WhileInstruction::~WhileInstruction(void)
 
 bool WhileInstruction::execute()
 {
-	cout<<"----------While"<<endl;
+	if(interpr->isTrace()) cout<<"----------While"<<endl;
 
 	expr->setInterpreter(this->interpr);
 
 	for(;;)																//loop
 	{
+		//if(expr->getResult()) delete expr->getResult();
 		if(expr->execute())												//calc expression
 		{
 			Value* val =expr->getResult();								//get result

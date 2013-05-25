@@ -20,7 +20,7 @@ FunDeclarationInstruction::~FunDeclarationInstruction(void)
 
 bool FunDeclarationInstruction::execute()
 {
-	cout<<"----------Fundec"<<endl;
+	if(interpr->isTrace()) cout<<"----------Fundec"<<endl;
 
 	if(interpr->addFunction(new Function(name, parameters, instructions, returnExpr)))
 	{

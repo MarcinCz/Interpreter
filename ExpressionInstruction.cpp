@@ -47,12 +47,13 @@ void ExpressionInstruction::clearTree(ExpressionTreeNode* node)
 
 bool ExpressionInstruction::execute()
 {
-	cout << "----------Expression" <<endl;
+	if(interpr->isTrace()) cout << "----------Expression" <<endl;
+	if(result) delete result;				//if we are executing this instruction more than 1 time
 	result = calcTreeValue(root);
 
 	if(result)
 	{
-		cout<<"----------"<<result->toString()<<endl;
+		if(interpr->isTrace()) cout<<"----------"<<result->toString()<<endl;
 		return true;
 	}
 	else 
@@ -114,7 +115,7 @@ Value* ExpressionInstruction::calcTreeValue(ExpressionTreeNode* root)
 			return NULL;
 		}
 
-		Value* val = new Value(calcTreeValue(root->getChildAt(0)));
+		Value* val = calcTreeValue(root->getChildAt(0));
 
 		if(root->getChildAt(0)->getType() == errorNodeType)
 		{
